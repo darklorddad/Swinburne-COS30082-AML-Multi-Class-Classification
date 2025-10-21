@@ -1,8 +1,11 @@
-import argparse
 import json
 import os
 import random
 import shutil
+import sys
+import threading
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 
 
 def split_image_dataset(source_dir: str, output_dir: str, min_images_per_split: int = 5):
@@ -129,19 +132,105 @@ def split_image_dataset(source_dir: str, output_dir: str, min_images_per_split: 
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Split an image dataset into train and validation sets.")
-    parser.add_argument("--source-dir", type=str, required=True, help="The path to the source dataset directory.")
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        required=True,
-        help="The base path for the output directories (e.g., 'my_dataset' will create 'my_dataset_train' and 'my_dataset_validation').",
-    )
-    parser.add_argument(
-        "--min-images-per-split",
-        type=int,
-        default=5,
-        help="The minimum number of images for each of the training and validation sets.",
-    )
-    args = parser.parse_args()
-    split_image_dataset(args.source_dir, args.output_dir, args.min_images_per_split)
+
+    class TextRedirector:
+        def __init__(self, widget):
+            self.widget = widget
+
+        def write(self, text):
+            self.widget.configure(state="normal")
+            self.widget.insert("end", text)
+            self.widget.see("end")
+            self.widget.configure(state="disabled")
+
+        def flush(self):
+            pass
+
+    def browse_directory(entry):
+        directory = filedialog.askdirectory()
+        if directory:
+            entry.delete(0, "end")
+            entry.insert(0, directory)
+
+    def run_splitting_thread(source_dir, output_dir, min_images, button):
+        try:
+            split_image_dataset(source_dir, output_dir, min_images)
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+        finally:
+            button.config(state="normal")
+
+    def start_splitting():
+        source_dir = source_dir_entry.get()
+        output_dir = output_dir_entry.get()
+        try:
+            min_images = int(min_images_entry.get())
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Minimum images per split must be an integer.")
+            return
+
+        if not source_dir or not output_dir:
+            messagebox.showerror("Invalid Input", "Source and output directories must be specified.")
+            return
+
+        start_button.config(state="disabled")
+        log_text.configure(state="normal")
+        log_text.delete("1.0", "end")
+        log_text.configure(state="disabled")
+
+        thread = threading.Thread(
+            target=run_splitting_thread, args=(source_dir, output_dir, min_images, start_button)
+        )
+        thread.daemon = True
+        thread.start()
+
+    root = tk.Tk()
+    root.title("AutoTrain Dataset Splitter")
+
+    frame = ttk.Frame(root, padding="10")
+    frame.grid(row=0, column=0, sticky="nsew")
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_rowconfigure(0, weight=1)
+
+    # Source Directory
+    ttk.Label(frame, text="Source Directory:").grid(column=0, row=0, sticky="w")
+    source_dir_entry = ttk.Entry(frame, width=50)
+    source_dir_entry.grid(column=1, row=0, sticky="ew")
+    ttk.Button(frame, text="Browse...", command=lambda: browse_directory(source_dir_entry)).grid(column=2, row=0)
+
+    # Output Directory
+    ttk.Label(frame, text="Output Directory:").grid(column=0, row=1, sticky="w")
+    output_dir_entry = ttk.Entry(frame, width=50)
+    output_dir_entry.grid(column=1, row=1, sticky="ew")
+    ttk.Button(frame, text="Browse...", command=lambda: browse_directory(output_dir_entry)).grid(column=2, row=1)
+
+    # Min Images Per Split
+    ttk.Label(frame, text="Min Images Per Split:").grid(column=0, row=2, sticky="w")
+    min_images_entry = ttk.Entry(frame)
+    min_images_entry.grid(column=1, row=2, sticky="w")
+    min_images_entry.insert(0, "5")
+
+    # Start Button
+    start_button = ttk.Button(frame, text="Start Splitting", command=start_splitting)
+    start_button.grid(column=1, row=3, pady=10)
+
+    # Log
+    log_frame = ttk.LabelFrame(frame, text="Log", padding="5")
+    log_frame.grid(column=0, row=4, columnspan=3, sticky="nsew")
+    frame.grid_columnconfigure(1, weight=1)
+    frame.grid_rowconfigure(4, weight=1)
+
+    log_text = tk.Text(log_frame, wrap="word", height=15, state="disabled")
+    log_text.pack(side="left", fill="both", expand=True)
+
+    scrollbar = ttk.Scrollbar(log_frame, orient="vertical", command=log_text.yview)
+    scrollbar.pack(side="right", fill="y")
+    log_text["yscrollcommand"] = scrollbar.set
+
+    sys.stdout = TextRedirector(log_text)
+    sys.stderr = TextRedirector(log_text)
+
+    for child in frame.winfo_children():
+        child.grid_configure(padx=5, pady=5)
+
+    root.mainloop()
