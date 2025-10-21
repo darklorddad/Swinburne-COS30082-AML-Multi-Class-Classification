@@ -50,9 +50,9 @@ class ManifestGeneratorApp:
         manifest_path = filedialog.asksaveasfilename(
             initialdir=directory,
             title="Save manifest as",
-            defaultextension=".txt",
-            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
-            initialfile="manifest.txt"
+            defaultextension=".md",
+            filetypes=[("Markdown files", "*.md"), ("Text files", "*.txt"), ("All files", "*.*")],
+            initialfile="manifest.md"
         )
 
         if not manifest_path:
@@ -67,10 +67,6 @@ class ManifestGeneratorApp:
             '.pyc', '.pyo', '.pyd', '.o', '.so', '.dll', '.exe',
             # Archives
             '.zip', '.tar', '.gz', '.rar', '.7z',
-            # Images
-            '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico', '.svg',
-            # Documents
-            '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
             # Other
             '.log', '.tmp', '.bak', '.swp'
         }
@@ -92,7 +88,7 @@ class ManifestGeneratorApp:
                         full_path = os.path.join(root, filename)
                         # Use forward slashes for consistency in manifest
                         relative_path = os.path.relpath(full_path, directory).replace(os.sep, '/')
-                        f.write(f"{relative_path}\n")
+                        f.write(f"- {relative_path}\n")
 
             messagebox.showinfo("Success", f"Manifest file created at:\n{manifest_path}")
         except Exception as e:
