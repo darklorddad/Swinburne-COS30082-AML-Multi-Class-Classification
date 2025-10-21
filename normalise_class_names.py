@@ -87,7 +87,7 @@ class NormaliseClassNamesApp:
                 old_path = os.path.join(target_dir, old_name)
                 new_path = os.path.join(target_dir, new_name)
 
-                if os.path.exists(new_path):
+                if os.path.exists(new_path) and not os.path.samefile(old_path, new_path):
                     self.log(f"Warning: Cannot rename '{old_name}' to '{new_name}' because a directory with that name already exists. Skipping.")
                     continue
                 
