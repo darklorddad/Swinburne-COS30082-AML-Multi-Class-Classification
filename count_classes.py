@@ -15,7 +15,7 @@ class ClassCounterApp:
 
         self.target_dir = tk.StringVar()
         self.save_to_manifest = tk.BooleanVar()
-        self.manifest_path = tk.StringVar(value="class_counts.txt")
+        self.manifest_path = tk.StringVar(value="class_counts.md")
 
         # Frame for directory selection
         dir_frame = tk.Frame(self.root, padx=10, pady=10)
@@ -81,8 +81,8 @@ class ClassCounterApp:
     def select_manifest_file(self):
         """Open a dialog to select a manifest file for saving."""
         filepath = filedialog.asksaveasfilename(
-            defaultextension=".txt",
-            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+            defaultextension=".md",
+            filetypes=[("Markdown files", "*.md"), ("Text files", "*.txt"), ("All files", "*.*")],
             initialfile=self.manifest_path.get(),
             title="Save Manifest As"
         )
@@ -145,10 +145,12 @@ class ClassCounterApp:
                 self.log(f"Saving manifest to {manifest_path}...")
                 try:
                     with open(manifest_path, 'w') as f:
-                        f.write(f"Total classes: {total_classes}\n")
-                        f.write("-" * 20 + "\n")
+                        f.write("# Class Count Manifest\n\n")
+                        f.write(f"**Total classes:** {total_classes}\n\n")
+                        f.write("| Class Name | Item Count |\n")
+                        f.write("|------------|------------|\n")
                         for class_name, count in sorted_counts:
-                            f.write(f"{class_name}: {count} items\n")
+                            f.write(f"| {class_name} | {count} |\n")
                         self.log("Manifest saved successfully.")
                 except IOError as e:
                     self.log(f"Error writing to manifest file: {e}")
