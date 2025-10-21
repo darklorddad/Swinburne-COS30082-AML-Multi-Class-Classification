@@ -40,18 +40,27 @@ class ManifestGeneratorApp:
 
     def generate_manifest(self):
         """
-        Generate a manifest.txt file for the selected directory.
+        Generate a manifest file for the selected directory.
         """
         directory = self.directory_path.get()
         if not directory:
             messagebox.showerror("Error", "Please select a directory first.")
             return
 
-        manifest_path = os.path.join(directory, "manifest.txt")
-        
+        manifest_path = filedialog.asksaveasfilename(
+            initialdir=directory,
+            title="Save manifest as",
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+            initialfile="manifest.txt"
+        )
+
+        if not manifest_path:
+            return  # User cancelled save dialog
+
         # Common directories and files to ignore
         ignored_dirs = {'.git', '__pycache__', '.vscode', '.idea', 'node_modules', 'venv', '.venv'}
-        ignored_files = {'manifest.txt'}
+        ignored_files = {os.path.basename(manifest_path)}
         # Ignoring binary/non-text files by extension is a good idea for prompt context
         ignored_extensions = {
             # Compiled
@@ -85,7 +94,7 @@ class ManifestGeneratorApp:
                         relative_path = os.path.relpath(full_path, directory).replace(os.sep, '/')
                         f.write(f"{relative_path}\n")
 
-            messagebox.showinfo("Success", f"Manifest file 'manifest.txt' created in:\n{directory}")
+            messagebox.showinfo("Success", f"Manifest file created at:\n{manifest_path}")
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {e}")
 
