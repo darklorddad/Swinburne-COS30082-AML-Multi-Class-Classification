@@ -38,13 +38,32 @@ def split_image_dataset(source_dir: str, output_dir: str, min_images_per_split: 
         if not dirs and files:
             class_dirs.append(root)
 
+    # Pre-scan to validate dataset requirements
+    image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"}
+    required_total_images_per_class = min_images_per_split * 2
+    valid_class_count = 0
+    class_image_data = {}
+
+    for class_dir in class_dirs:
+        images = [
+            f
+            for f in os.listdir(class_dir)
+            if os.path.isfile(os.path.join(class_dir, f)) and os.path.splitext(f)[1].lower() in image_extensions
+        ]
+        class_image_data[class_dir] = images
+        if len(images) >= required_total_images_per_class:
+            valid_class_count += 1
+
+    if valid_class_count < 2:
+        print(f"Error: Dataset splitting requires at least 2 classes with a minimum of {required_total_images_per_class} images each.")
+        print(f"Found {valid_class_count} valid classes.")
+        return
+
     manifest = {
         "included_classes": {},
         "skipped_classes": {},
     }
     processed_class_names = set()
-
-    required_images = min_images_per_split * 2  # train, validation
 
     for class_dir in class_dirs:
         base_class_name = os.path.basename(class_dir)
@@ -55,36 +74,29 @@ def split_image_dataset(source_dir: str, output_dir: str, min_images_per_split: 
             counter += 1
         processed_class_names.add(class_name)
 
-        image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"}
-        images = [
-            f
-            for f in os.listdir(class_dir)
-            if os.path.isfile(os.path.join(class_dir, f)) and os.path.splitext(f)[1].lower() in image_extensions
-        ]
+        images = class_image_data[class_dir]
+        required_total_images = min_images_per_split * 2
 
-        if len(images) < required_images:
+        if len(images) < required_total_images:
             manifest["skipped_classes"][class_name] = {
                 "original_path": class_dir,
                 "count": len(images),
-                "reason": f"Not enough images. Found {len(images)}, required {required_images}.",
+                "reason": f"Not enough images. Found {len(images)}, required a total of {required_total_images}.",
             }
             continue
 
         random.shuffle(images)
 
-        # Determine the number of validation images
-        num_validation = int(len(images) * 0.20)
-        if num_validation < min_images_per_split:
-            num_validation = min_images_per_split
+        # Determine split using the two-tiered logic
+        num_val_ratio = round(len(images) * 0.2)
+        num_train_ratio = len(images) - num_val_ratio
 
-        # Ensure there's at least min_images_per_split for training
-        if len(images) - num_validation < min_images_per_split:
-            manifest["skipped_classes"][class_name] = {
-                "original_path": class_dir,
-                "count": len(images),
-                "reason": f"Not enough images for a train/validation split. Found {len(images)}, required at least {num_validation + min_images_per_split}.",
-            }
-            continue
+        if num_val_ratio >= min_images_per_split and num_train_ratio >= min_images_per_split:
+            # Use the 80/20 ratio split
+            num_validation = num_val_ratio
+        else:
+            # Fall back to the fixed minimum split
+            num_validation = min_images_per_split
 
         validation_images = images[:num_validation]
         train_images = images[num_validation:]
