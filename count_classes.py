@@ -11,9 +11,11 @@ class ClassCounterApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Class Counter")
-        self.root.geometry("600x400")
+        self.root.geometry("600x450")
 
         self.target_dir = tk.StringVar()
+        self.save_to_manifest = tk.BooleanVar()
+        self.manifest_path = tk.StringVar(value="class_counts.txt")
 
         # Frame for directory selection
         dir_frame = tk.Frame(self.root, padx=10, pady=10)
@@ -27,6 +29,22 @@ class ClassCounterApp:
 
         browse_button = tk.Button(dir_frame, text="Browse...", command=self.select_directory)
         browse_button.pack(side=tk.LEFT)
+
+        # Frame for manifest output
+        manifest_frame = tk.Frame(self.root, padx=10, pady=5)
+        manifest_frame.pack(fill=tk.X)
+
+        manifest_check = tk.Checkbutton(manifest_frame, text="Save to manifest file", variable=self.save_to_manifest)
+        manifest_check.pack(side=tk.LEFT)
+
+        manifest_label = tk.Label(manifest_frame, text="Manifest File:")
+        manifest_label.pack(side=tk.LEFT, padx=(10, 0))
+
+        self.manifest_entry = tk.Entry(manifest_frame, textvariable=self.manifest_path, width=40)
+        self.manifest_entry.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
+
+        manifest_browse_button = tk.Button(manifest_frame, text="Browse...", command=self.select_manifest_file)
+        manifest_browse_button.pack(side=tk.LEFT)
 
         # Frame for controls
         control_frame = tk.Frame(self.root, padx=10, pady=5)
@@ -60,6 +78,18 @@ class ClassCounterApp:
             self.target_dir.set(directory)
             self.log(f"Selected directory: {directory}")
 
+    def select_manifest_file(self):
+        """Open a dialog to select a manifest file for saving."""
+        filepath = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+            initialfile=self.manifest_path.get(),
+            title="Save Manifest As"
+        )
+        if filepath:
+            self.manifest_path.set(filepath)
+            self.log(f"Manifest will be saved to: {filepath}")
+
     def start_counting(self):
         """Start the class counting process in a new thread."""
         target_dir = self.target_dir.get()
@@ -67,12 +97,19 @@ class ClassCounterApp:
             self.log("Please select a directory first.")
             return
 
+        save_to_manifest = self.save_to_manifest.get()
+        manifest_path = self.manifest_path.get()
+
+        if save_to_manifest and not manifest_path:
+            self.log("Please specify a manifest file path.")
+            return
+
         self.log("Starting class count...")
-        thread = threading.Thread(target=self.run_counting_logic, args=(target_dir,))
+        thread = threading.Thread(target=self.run_counting_logic, args=(target_dir, save_to_manifest, manifest_path))
         thread.daemon = True
         thread.start()
 
-    def run_counting_logic(self, target_dir):
+    def run_counting_logic(self, target_dir, save_to_manifest, manifest_path):
         """The logic for counting classes and files."""
         if not os.path.isdir(target_dir):
             self.log(f"Error: Directory not found at '{target_dir}'")
@@ -86,20 +123,35 @@ class ClassCounterApp:
                 self.log(f"No class subdirectories found in '{target_dir}'.")
                 return
 
-            self.log(f"Found {len(class_dirs)} classes.")
+            total_classes = len(class_dirs)
+            self.log(f"Found {total_classes} classes.")
             self.log("-" * 20)
 
             class_counts = Counter()
-            for class_name in sorted(class_dirs):
+            for class_name in class_dirs:
                 class_path = os.path.join(target_dir, class_name)
                 num_files = len([f for f in os.listdir(class_path) if os.path.isfile(os.path.join(class_path, f))])
                 class_counts[class_name] = num_files
             
-            for class_name, count in class_counts.items():
+            sorted_counts = sorted(class_counts.items())
+
+            for class_name, count in sorted_counts:
                 self.log(f"{class_name}: {count} items")
             
             self.log("-" * 20)
             self.log("Counting complete.")
+
+            if save_to_manifest:
+                self.log(f"Saving manifest to {manifest_path}...")
+                try:
+                    with open(manifest_path, 'w') as f:
+                        f.write(f"Total classes: {total_classes}\n")
+                        f.write("-" * 20 + "\n")
+                        for class_name, count in sorted_counts:
+                            f.write(f"{class_name}: {count} items\n")
+                        self.log("Manifest saved successfully.")
+                except IOError as e:
+                    self.log(f"Error writing to manifest file: {e}")
 
         except OSError as e:
             self.log(f"Error accessing directory '{target_dir}': {e}")
