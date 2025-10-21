@@ -102,7 +102,7 @@ class NormaliseClassNamesApp:
 
         except Exception as e:
             self.log(f"An unexpected error occurred: {e}")
-            self.root.after(0, lambda: messagebox.showerror("Error", f"An unexpected error occurred: {e}"))
+            self.root.after(0, lambda e=e: messagebox.showerror("Error", f"An unexpected error occurred: {e}"))
         finally:
             self.root.after(0, lambda: self.normalise_button.config(state=tk.NORMAL, text="Normalise Class Names"))
 
