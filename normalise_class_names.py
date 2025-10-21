@@ -88,11 +88,24 @@ class NormaliseClassNamesApp:
                 new_path = os.path.join(target_dir, new_name)
 
                 if os.path.exists(new_path) and not os.path.samefile(old_path, new_path):
-                    self.log(f"Warning: Cannot rename '{old_name}' to '{new_name}' because a directory with that name already exists. Skipping.")
+                    self.log(f"Warning: Cannot rename '{old_name}' to '{new_name}' because a different directory with that name already exists. Skipping.")
                     continue
                 
                 try:
-                    os.rename(old_path, new_path)
+                    # Use a two-step rename process to handle case-insensitive filesystems (like Windows)
+                    # where renaming 'Foo' to 'foo' is a no-op. This is safer than a direct rename.
+                    temp_name = old_name + "_temp_rename"
+                    temp_path = os.path.join(target_dir, temp_name)
+
+                    if os.path.exists(temp_path):
+                        self.log(f"Warning: Temporary path '{temp_path}' already exists. Skipping rename for '{old_name}'.")
+                        continue
+
+                    # Step 1: old -> temp
+                    os.rename(old_path, temp_path)
+                    
+                    # Step 2: temp -> new
+                    os.rename(temp_path, new_path)
                     self.log(f"Renamed '{old_name}' to '{new_name}'.")
                 except OSError as e:
                     self.log(f"Error renaming '{old_name}': {e}")
