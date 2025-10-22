@@ -1,18 +1,21 @@
 import json
 import os
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 
-def plot_training_metrics(json_path, save_dir=None):
+def plot_training_metrics(json_path):
     """
-    Loads trainer_state.json and plots training and evaluation metrics.
+    Loads trainer_state.json and creates plots for training and evaluation metrics.
 
     Args:
         json_path (str): The path to the trainer_state.json file.
-        save_dir (str, optional): Directory to save plots. If None, plots are shown.
+
+    Returns:
+        dict: A dictionary of matplotlib figures, with chart titles as keys.
     """
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
@@ -38,141 +41,148 @@ def plot_training_metrics(json_path, save_dir=None):
     if 'step' in eval_df.columns:
         eval_df['step'] = pd.to_numeric(eval_df['step'])
 
-    fig, axs = plt.subplots(6, 2, figsize=(15, 30))
-    fig.suptitle('Training and Evaluation Metrics', fontsize=16)
+    figures = {}
 
     # Plot 1: Loss (Training and Evaluation)
+    fig_loss, ax_loss = plt.subplots(figsize=(10, 6))
     if not train_df.empty and 'step' in train_df.columns and 'loss' in train_df.columns:
-        axs[0, 0].plot(train_df['step'], train_df['loss'], label='Training Loss', marker='o', linestyle='-')
+        ax_loss.plot(train_df['step'], train_df['loss'], label='Training Loss', marker='o', linestyle='-')
     if not eval_df.empty and 'step' in eval_df.columns and 'eval_loss' in eval_df.columns:
-        axs[0, 0].plot(eval_df['step'], eval_df['eval_loss'], label='Evaluation Loss', marker='x', linestyle='--')
-    axs[0, 0].set_xlabel('Step')
-    axs[0, 0].set_ylabel('Loss')
-    axs[0, 0].set_title('Training vs. Evaluation Loss')
-    axs[0, 0].legend()
-    axs[0, 0].grid(True)
+        ax_loss.plot(eval_df['step'], eval_df['eval_loss'], label='Evaluation Loss', marker='x', linestyle='--')
+    ax_loss.set_xlabel('Step')
+    ax_loss.set_ylabel('Loss')
+    ax_loss.set_title('Training vs. Evaluation Loss')
+    ax_loss.legend()
+    ax_loss.grid(True)
+    figures['Loss'] = fig_loss
 
     # Plot 2: Evaluation Accuracy
+    fig_acc, ax_acc = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns and 'eval_accuracy' in eval_df.columns:
-        axs[0, 1].plot(eval_df['step'], eval_df['eval_accuracy'], label='Evaluation Accuracy', marker='o', linestyle='-', color='g')
-    axs[0, 1].set_xlabel('Step')
-    axs[0, 1].set_ylabel('Accuracy')
-    axs[0, 1].set_title('Evaluation Accuracy')
-    axs[0, 1].legend()
-    axs[0, 1].grid(True)
+        ax_acc.plot(eval_df['step'], eval_df['eval_accuracy'], label='Evaluation Accuracy', marker='o', linestyle='-', color='g')
+    ax_acc.set_xlabel('Step')
+    ax_acc.set_ylabel('Accuracy')
+    ax_acc.set_title('Evaluation Accuracy')
+    ax_acc.legend()
+    ax_acc.grid(True)
+    figures['Accuracy'] = fig_acc
 
     # Plot 3: Learning Rate
+    fig_lr, ax_lr = plt.subplots(figsize=(10, 6))
     if not train_df.empty and 'step' in train_df.columns and 'learning_rate' in train_df.columns:
-        axs[1, 0].plot(train_df['step'], train_df['learning_rate'], label='Learning Rate', marker='o', linestyle='-', color='r')
-    axs[1, 0].set_xlabel('Step')
-    axs[1, 0].set_ylabel('Learning Rate')
-    axs[1, 0].set_title('Learning Rate Schedule')
-    axs[1, 0].legend()
-    axs[1, 0].grid(True)
+        ax_lr.plot(train_df['step'], train_df['learning_rate'], label='Learning Rate', marker='o', linestyle='-', color='r')
+    ax_lr.set_xlabel('Step')
+    ax_lr.set_ylabel('Learning Rate')
+    ax_lr.set_title('Learning Rate Schedule')
+    ax_lr.legend()
+    ax_lr.grid(True)
+    figures['Learning Rate'] = fig_lr
 
     # Plot 4: Grad Norm
+    fig_gn, ax_gn = plt.subplots(figsize=(10, 6))
     if not train_df.empty and 'step' in train_df.columns and 'grad_norm' in train_df.columns:
-        axs[1, 1].plot(train_df['step'], train_df['grad_norm'], label='Grad Norm', marker='o', linestyle='-', color='purple')
-    axs[1, 1].set_xlabel('Step')
-    axs[1, 1].set_ylabel('Grad Norm')
-    axs[1, 1].set_title('Gradient Norm')
-    axs[1, 1].legend()
-    axs[1, 1].grid(True)
+        ax_gn.plot(train_df['step'], train_df['grad_norm'], label='Grad Norm', marker='o', linestyle='-', color='purple')
+    ax_gn.set_xlabel('Step')
+    ax_gn.set_ylabel('Grad Norm')
+    ax_gn.set_title('Gradient Norm')
+    ax_gn.legend()
+    ax_gn.grid(True)
+    figures['Gradient Norm'] = fig_gn
 
     # Plot 5: Evaluation F1 Scores
+    fig_f1, ax_f1 = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns:
         if 'eval_f1_macro' in eval_df.columns:
-            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o', linestyle='-')
+            ax_f1.plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o', linestyle='-')
         if 'eval_f1_micro' in eval_df.columns:
-            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x', linestyle='--')
+            ax_f1.plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x', linestyle='--')
         if 'eval_f1_weighted' in eval_df.columns:
-            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s', linestyle=':')
-    axs[2, 0].set_xlabel('Step')
-    axs[2, 0].set_ylabel('F1 Score')
-    axs[2, 0].set_title('Evaluation F1 Scores')
-    axs[2, 0].legend()
-    axs[2, 0].grid(True)
+            ax_f1.plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s', linestyle=':')
+    ax_f1.set_xlabel('Step')
+    ax_f1.set_ylabel('F1 Score')
+    ax_f1.set_title('Evaluation F1 Scores')
+    ax_f1.legend()
+    ax_f1.grid(True)
+    figures['F1 Scores'] = fig_f1
 
     # Plot 6: Evaluation Precision Scores
+    fig_prec, ax_prec = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns:
         if 'eval_precision_macro' in eval_df.columns:
-            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_macro'], label='Precision Macro', marker='o', linestyle='-')
+            ax_prec.plot(eval_df['step'], eval_df['eval_precision_macro'], label='Precision Macro', marker='o', linestyle='-')
         if 'eval_precision_micro' in eval_df.columns:
-            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_micro'], label='Precision Micro', marker='x', linestyle='--')
+            ax_prec.plot(eval_df['step'], eval_df['eval_precision_micro'], label='Precision Micro', marker='x', linestyle='--')
         if 'eval_precision_weighted' in eval_df.columns:
-            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_weighted'], label='Precision Weighted', marker='s', linestyle=':')
-    axs[2, 1].set_xlabel('Step')
-    axs[2, 1].set_ylabel('Precision Score')
-    axs[2, 1].set_title('Evaluation Precision Scores')
-    axs[2, 1].legend()
-    axs[2, 1].grid(True)
+            ax_prec.plot(eval_df['step'], eval_df['eval_precision_weighted'], label='Precision Weighted', marker='s', linestyle=':')
+    ax_prec.set_xlabel('Step')
+    ax_prec.set_ylabel('Precision Score')
+    ax_prec.set_title('Evaluation Precision Scores')
+    ax_prec.legend()
+    ax_prec.grid(True)
+    figures['Precision'] = fig_prec
 
     # Plot 7: Evaluation Recall Scores
+    fig_recall, ax_recall = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns:
         if 'eval_recall_macro' in eval_df.columns:
-            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_macro'], label='Recall Macro', marker='o', linestyle='-')
+            ax_recall.plot(eval_df['step'], eval_df['eval_recall_macro'], label='Recall Macro', marker='o', linestyle='-')
         if 'eval_recall_micro' in eval_df.columns:
-            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_micro'], label='Recall Micro', marker='x', linestyle='--')
+            ax_recall.plot(eval_df['step'], eval_df['eval_recall_micro'], label='Recall Micro', marker='x', linestyle='--')
         if 'eval_recall_weighted' in eval_df.columns:
-            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_weighted'], label='Recall Weighted', marker='s', linestyle=':')
-    axs[3, 0].set_xlabel('Step')
-    axs[3, 0].set_ylabel('Recall Score')
-    axs[3, 0].set_title('Evaluation Recall Scores')
-    axs[3, 0].legend()
-    axs[3, 0].grid(True)
+            ax_recall.plot(eval_df['step'], eval_df['eval_recall_weighted'], label='Recall Weighted', marker='s', linestyle=':')
+    ax_recall.set_xlabel('Step')
+    ax_recall.set_ylabel('Recall Score')
+    ax_recall.set_title('Evaluation Recall Scores')
+    ax_recall.legend()
+    ax_recall.grid(True)
+    figures['Recall'] = fig_recall
 
     # Plot 8: Epoch Progression
+    fig_epoch, ax_epoch = plt.subplots(figsize=(10, 6))
     if not df.empty and 'step' in df.columns and 'epoch' in df.columns:
         epoch_df = df[['step', 'epoch']].dropna().drop_duplicates('step').sort_values('step')
-        axs[3, 1].plot(epoch_df['step'], epoch_df['epoch'], label='Epoch', marker='.', linestyle='-')
-    axs[3, 1].set_xlabel('Step')
-    axs[3, 1].set_ylabel('Epoch')
-    axs[3, 1].set_title('Epoch Progression')
-    axs[3, 1].legend()
-    axs[3, 1].grid(True)
+        ax_epoch.plot(epoch_df['step'], epoch_df['epoch'], label='Epoch', marker='.', linestyle='-')
+    ax_epoch.set_xlabel('Step')
+    ax_epoch.set_ylabel('Epoch')
+    ax_epoch.set_title('Epoch Progression')
+    ax_epoch.legend()
+    ax_epoch.grid(True)
+    figures['Epoch'] = fig_epoch
 
     # Plot 9: Evaluation Runtime
+    fig_runtime, ax_runtime = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns and 'eval_runtime' in eval_df.columns:
-        axs[4, 0].plot(eval_df['step'], eval_df['eval_runtime'], label='Eval Runtime', marker='o', linestyle='-')
-    axs[4, 0].set_xlabel('Step')
-    axs[4, 0].set_ylabel('Runtime (s)')
-    axs[4, 0].set_title('Evaluation Runtime')
-    axs[4, 0].legend()
-    axs[4, 0].grid(True)
+        ax_runtime.plot(eval_df['step'], eval_df['eval_runtime'], label='Eval Runtime', marker='o', linestyle='-')
+    ax_runtime.set_xlabel('Step')
+    ax_runtime.set_ylabel('Runtime (s)')
+    ax_runtime.set_title('Evaluation Runtime')
+    ax_runtime.legend()
+    ax_runtime.grid(True)
+    figures['Eval Runtime'] = fig_runtime
 
     # Plot 10: Evaluation Samples Per Second
+    fig_sps, ax_sps = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns and 'eval_samples_per_second' in eval_df.columns:
-        axs[4, 1].plot(eval_df['step'], eval_df['eval_samples_per_second'], label='Eval Samples/sec', marker='o', linestyle='-')
-    axs[4, 1].set_xlabel('Step')
-    axs[4, 1].set_ylabel('Samples/sec')
-    axs[4, 1].set_title('Evaluation Samples Per Second')
-    axs[4, 1].legend()
-    axs[4, 1].grid(True)
+        ax_sps.plot(eval_df['step'], eval_df['eval_samples_per_second'], label='Eval Samples/sec', marker='o', linestyle='-')
+    ax_sps.set_xlabel('Step')
+    ax_sps.set_ylabel('Samples/sec')
+    ax_sps.set_title('Evaluation Samples Per Second')
+    ax_sps.legend()
+    ax_sps.grid(True)
+    figures['Eval Samples/sec'] = fig_sps
 
     # Plot 11: Evaluation Steps Per Second
+    fig_steps_ps, ax_steps_ps = plt.subplots(figsize=(10, 6))
     if not eval_df.empty and 'step' in eval_df.columns and 'eval_steps_per_second' in eval_df.columns:
-        axs[5, 0].plot(eval_df['step'], eval_df['eval_steps_per_second'], label='Eval Steps/sec', marker='o', linestyle='-')
-    axs[5, 0].set_xlabel('Step')
-    axs[5, 0].set_ylabel('Steps/sec')
-    axs[5, 0].set_title('Evaluation Steps Per Second')
-    axs[5, 0].legend()
-    axs[5, 0].grid(True)
+        ax_steps_ps.plot(eval_df['step'], eval_df['eval_steps_per_second'], label='Eval Steps/sec', marker='o', linestyle='-')
+    ax_steps_ps.set_xlabel('Step')
+    ax_steps_ps.set_ylabel('Steps/sec')
+    ax_steps_ps.set_title('Evaluation Steps Per Second')
+    ax_steps_ps.legend()
+    ax_steps_ps.grid(True)
+    figures['Eval Steps/sec'] = fig_steps_ps
 
-    # Hide unused subplot
-    axs[5, 1].axis('off')
-
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-    if save_dir:
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        save_path = os.path.join(save_dir, "training_metrics.png")
-        fig.savefig(save_path)
-        plt.close(fig)
-        return f"Chart saved to {save_path}"
-
-    plt.show()
-    return "Displaying chart."
+    return figures
 
 if __name__ == '__main__':
 
@@ -191,6 +201,23 @@ if __name__ == '__main__':
             entry.delete(0, tk.END)
             entry.insert(0, dir_path)
 
+    def display_charts_in_tabs(figures, parent):
+        chart_window = tk.Toplevel(parent)
+        chart_window.title("Training & Evaluation Metrics")
+        chart_window.geometry("800x600")
+
+        notebook = ttk.Notebook(chart_window)
+        notebook.pack(expand=True, fill='both', padx=5, pady=5)
+
+        for title, fig in figures.items():
+            tab = ttk.Frame(notebook)
+            notebook.add(tab, text=title)
+
+            canvas = FigureCanvasTkAgg(fig, master=tab)
+            canvas.draw()
+            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+            plt.close(fig)  # Close the figure to free up memory
+
     def generate_charts():
         json_path = json_path_entry.get()
         save_dir = save_dir_entry.get()
@@ -198,12 +225,22 @@ if __name__ == '__main__':
             status_label.config(text="Please select a JSON file.", fg="red")
             return
 
-        if not save_dir:
-            save_dir = None
-
         try:
-            status = plot_training_metrics(json_path, save_dir)
-            status_label.config(text=status, fg="green")
+            figures = plot_training_metrics(json_path)
+
+            if save_dir:
+                if not os.path.exists(save_dir):
+                    os.makedirs(save_dir)
+                for title, fig in figures.items():
+                    filename = "".join(c for c in title if c.isalnum() or c in (' ', '_')).rstrip().replace(' ', '_')
+                    save_path = os.path.join(save_dir, f"{filename}.png")
+                    fig.savefig(save_path)
+                    plt.close(fig)
+                status_label.config(text=f"Charts saved to {save_dir}", fg="green")
+            else:
+                display_charts_in_tabs(figures, root)
+                status_label.config(text="Displaying charts in new window.", fg="green")
+
         except Exception as e:
             status_label.config(text=f"Error: {e}", fg="red")
 
