@@ -3,40 +3,33 @@ from transformers import AutoImageProcessor, AutoModelForImageClassification
 import torch
 from PIL import Image
 
-# --- Configuration ---
-# Specify the path to your fine-tuned model directory.
-# This directory should contain 'config.json', 'model.safetensors',
-# and 'preprocessor_config.json'.
-MODEL_PATH = "./"  # Assumes the script is in the same directory as the model files.
-
-# --- Load Model and Processor ---
-# Load the image processor and the fine-tuned model from the local directory.
-# The image processor is responsible for preparing the image for the model.
-# The model is the fine-tuned bird species classifier.
-try:
-    image_processor = AutoImageProcessor.from_pretrained(MODEL_PATH)
-    model = AutoModelForImageClassification.from_pretrained(MODEL_PATH)
-except Exception as e:
-    # Provide a helpful error message if the model files cannot be loaded.
-    raise OSError(
-        f"Error loading model from {MODEL_PATH}. "
-        f"Please ensure that '{MODEL_PATH}' contains the necessary model files "
-        f"('config.json', 'model.safetensors', 'preprocessor_config.json'). "
-        f"Original error: {e}"
-    )
 
 # --- Prediction Function ---
-def classify_bird(input_image: Image.Image) -> dict:
+def classify_bird(model_path: str, input_image: Image.Image) -> dict:
     """
     Classifies the bird species from an input image.
 
     Args:
+        model_path: Path to the fine-tuned model directory.
         input_image: A PIL Image of a bird.
 
     Returns:
         A dictionary with labels as keys and their corresponding confidence
         scores as values.
     """
+    # --- Load Model and Processor ---
+    try:
+        image_processor = AutoImageProcessor.from_pretrained(model_path)
+        model = AutoModelForImageClassification.from_pretrained(model_path)
+    except Exception as e:
+        # Provide a helpful error message if the model files cannot be loaded.
+        raise OSError(
+            f"Error loading model from {model_path}. "
+            f"Please ensure that '{model_path}' contains the necessary model files "
+            f"('config.json', 'model.safetensors', 'preprocessor_config.json'). "
+            f"Original error: {e}"
+        )
+
     # Preprocess the input image using the image processor.
     # This converts the PIL image into a tensor that the model can understand.
     inputs = image_processor(images=input_image, return_tensors="pt")
@@ -69,9 +62,15 @@ def classify_bird(input_image: Image.Image) -> dict:
 # --- Gradio Interface ---
 # Create the Gradio web application interface.
 
-# Define the input component: an image upload box.
-# 'type="pil"' ensures the input to our function is a PIL Image.
-inputs = gr.Image(type="pil", label="Upload a bird image")
+# Define the input components.
+inputs = [
+    gr.Textbox(
+        label="Model Path",
+        value="./",
+        info="Path to the directory containing model files.",
+    ),
+    gr.Image(type="pil", label="Upload a bird image"),
+]
 
 # Define the output component: a label that shows top predictions.
 # 'num_top_classes=5' configures it to display the top 5 results nicely.
