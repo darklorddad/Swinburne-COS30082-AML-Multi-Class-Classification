@@ -373,6 +373,14 @@ def run_plot_metrics(json_path):
     except Exception as e:
         raise gr.Error(str(e))
 
+def get_model_choices():
+    """Returns a list of directories in the current directory that start with 'Model-'."""
+    try:
+        return [d for d in os.listdir('.') if os.path.isdir(d) and d.startswith('Model-')]
+    except FileNotFoundError:
+        print("Warning: Could not find the current directory to scan for models.")
+        return []
+
 # #############################################################################
 # GRADIO UI
 # #############################################################################
@@ -383,7 +391,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.FileExplorer(label="Select Model Directory", file_count="single", root_dir=".", glob="Model-*")
+                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices())
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
             with gr.Column(scale=1):
