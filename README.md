@@ -23,25 +23,20 @@ The project uses the **Caltech-UCSD Birds 200 (CUB-200)** dataset. This is a cha
 
 ### Methodology
 
-Several models were trained to find the best-performing architecture for this classification task. The approach uses transfer learning, fine-tuning pre-trained models that have demonstrated strong performance on general image classification tasks. The base models explored include:
-
--   **FocalNet:** `microsoft/focalnet-base`
--   **Swin Transformer:** `XinWenMonash/swin_transformer`
--   **Swin Tiny:** `microsoft/swin-tiny-patch4-window7-224`
--   **Swin Tiny (fine-tuned on EuroSAT):** `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat`
+Several models were trained to find the best-performing architecture for this classification task. The approach uses transfer learning, fine-tuning pre-trained models that have demonstrated strong performance on general image classification tasks.
 
 ---
 
 ### Results
 
-The performance of each model was evaluated on the test set. The Swin Transformer model from `XinWenMonash/swin_transformer` achieved the highest accuracy.
+The performance of each model was evaluated on the test set. The Swin Transformer model achieved the highest accuracy.
 
-| Model | Base Model | Accuracy | F1 (Macro) |
-| :--- | :--- | :---: | :---: |
-| Swin Transformer | `XinWenMonash/swin_transformer` | **88.85%** | **0.8861** |
-| FocalNet Base | `microsoft/focalnet-base` | 82.62% | 0.8157 |
-| Swin Tiny (EuroSAT) | `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | 80.00% | 0.7928 |
-| Swin Tiny | `microsoft/swin-tiny-patch4-window7-224` | 78.44% | 0.7758 |
+| Model | Accuracy | F1 (Macro) |
+| :--- | :---: | :---: |
+| Swin Transformer | **88.85%** | **0.8861** |
+| FocalNet Base | 82.62% | 0.8157 |
+| Swin Tiny (EuroSAT) | 80.00% | 0.7928 |
+| Swin Tiny | 78.44% | 0.7758 |
 
 ---
 
