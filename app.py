@@ -465,15 +465,14 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
-                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
-            with gr.Column(scale=1):
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
+            with gr.Column(scale=1):
+                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
+                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
     with gr.Tab("Training Metrics"):
-        gr.Markdown("## Training Metrics for Selected Model")
         metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
         with gr.Column(visible=False) as inf_plots_container:
             with gr.Row():
@@ -539,31 +538,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
 
     with gr.Tab("Analysis & Utilities"):
         gr.Markdown("## Tools for Analysis and File Management")
-        with gr.Accordion("Plot Training Metrics", open=False):
-            analysis_plot_path = gr.Textbox(label="Path to trainer_state.json")
-            analysis_plot_button = gr.Button("Generate Plots")
-            with gr.Row():
-                analysis_plot_loss = gr.Plot(label="Loss")
-                analysis_plot_acc = gr.Plot(label="Accuracy")
-                analysis_plot_lr = gr.Plot(label="Learning Rate")
-            with gr.Row():
-                analysis_plot_grad = gr.Plot(label="Gradient Norm")
-                analysis_plot_f1 = gr.Plot(label="F1 Scores")
-                analysis_plot_prec = gr.Plot(label="Precision")
-            with gr.Row():
-                analysis_plot_recall = gr.Plot(label="Recall")
-                analysis_plot_epoch = gr.Plot(label="Epoch")
-                analysis_plot_runtime = gr.Plot(label="Eval Runtime")
-            with gr.Row():
-                analysis_plot_sps = gr.Plot(label="Eval Samples/sec")
-                analysis_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
-
-            analysis_plots = [
-                analysis_plot_loss, analysis_plot_acc, analysis_plot_lr, analysis_plot_grad,
-                analysis_plot_f1, analysis_plot_prec, analysis_plot_recall, analysis_plot_epoch,
-                analysis_plot_runtime, analysis_plot_sps, analysis_plot_steps_ps
-            ]
-            analysis_plot_button.click(run_plot_metrics, inputs=[analysis_plot_path], outputs=analysis_plots)
         with gr.Accordion("Check Dataset Balance", open=False):
             analysis_balance_path = gr.Textbox(label="Path to Manifest File")
             analysis_balance_button = gr.Button("Analyse Balance")
