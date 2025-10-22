@@ -458,21 +458,23 @@ def get_model_choices():
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)", css="#pred_label {min-height: 300px;}") as demo:
+with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
     gr.Markdown("# Multi-Class Classification (Bird Species)")
 
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
                 inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
-                inf_output_label = gr.Label(num_top_classes=5, label="Predictions", elem_id="pred_label")
+                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
             with gr.Column(scale=1):
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
+    with gr.Tab("Training Metrics"):
+        gr.Markdown("## Training Metrics for Selected Model")
+        gr.Markdown("Select a model from the 'Inference' tab to view its training metrics here.")
         with gr.Column(visible=False) as inf_plots_container:
-            gr.Markdown("## Training Metrics")
             with gr.Row():
                 inf_plot_loss = gr.Plot(label="Loss")
                 inf_plot_acc = gr.Plot(label="Accuracy")
