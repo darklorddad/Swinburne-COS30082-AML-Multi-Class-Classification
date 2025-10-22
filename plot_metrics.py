@@ -38,7 +38,7 @@ def plot_training_metrics(json_path, save_dir=None):
     if 'step' in eval_df.columns:
         eval_df['step'] = pd.to_numeric(eval_df['step'])
 
-    fig, axs = plt.subplots(4, 2, figsize=(15, 20))
+    fig, axs = plt.subplots(6, 2, figsize=(15, 30))
     fig.suptitle('Training and Evaluation Metrics', fontsize=16)
 
     # Plot 1: Loss (Training and Evaluation)
@@ -130,6 +130,36 @@ def plot_training_metrics(json_path, save_dir=None):
     axs[3, 1].set_title('Epoch Progression')
     axs[3, 1].legend()
     axs[3, 1].grid(True)
+
+    # Plot 9: Evaluation Runtime
+    if not eval_df.empty and 'step' in eval_df.columns and 'eval_runtime' in eval_df.columns:
+        axs[4, 0].plot(eval_df['step'], eval_df['eval_runtime'], label='Eval Runtime', marker='o', linestyle='-')
+    axs[4, 0].set_xlabel('Step')
+    axs[4, 0].set_ylabel('Runtime (s)')
+    axs[4, 0].set_title('Evaluation Runtime')
+    axs[4, 0].legend()
+    axs[4, 0].grid(True)
+
+    # Plot 10: Evaluation Samples Per Second
+    if not eval_df.empty and 'step' in eval_df.columns and 'eval_samples_per_second' in eval_df.columns:
+        axs[4, 1].plot(eval_df['step'], eval_df['eval_samples_per_second'], label='Eval Samples/sec', marker='o', linestyle='-')
+    axs[4, 1].set_xlabel('Step')
+    axs[4, 1].set_ylabel('Samples/sec')
+    axs[4, 1].set_title('Evaluation Samples Per Second')
+    axs[4, 1].legend()
+    axs[4, 1].grid(True)
+
+    # Plot 11: Evaluation Steps Per Second
+    if not eval_df.empty and 'step' in eval_df.columns and 'eval_steps_per_second' in eval_df.columns:
+        axs[5, 0].plot(eval_df['step'], eval_df['eval_steps_per_second'], label='Eval Steps/sec', marker='o', linestyle='-')
+    axs[5, 0].set_xlabel('Step')
+    axs[5, 0].set_ylabel('Steps/sec')
+    axs[5, 0].set_title('Evaluation Steps Per Second')
+    axs[5, 0].legend()
+    axs[5, 0].grid(True)
+
+    # Hide unused subplot
+    axs[5, 1].axis('off')
 
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
