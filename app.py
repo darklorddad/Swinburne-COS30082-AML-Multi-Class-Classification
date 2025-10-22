@@ -296,11 +296,18 @@ def util_plot_training_metrics(json_path):
 # #############################################################################
 
 def classify_bird(model_path: str, input_image: Image.Image) -> dict:
+    if not model_path:
+        raise gr.Error("Please select a model directory.")
+
+    model_dir = model_path
+    if os.path.isfile(model_path):
+        model_dir = os.path.dirname(model_path)
+
     try:
-        image_processor = AutoImageProcessor.from_pretrained(model_path)
-        model = AutoModelForImageClassification.from_pretrained(model_path)
+        image_processor = AutoImageProcessor.from_pretrained(model_dir)
+        model = AutoModelForImageClassification.from_pretrained(model_dir)
     except Exception as e:
-        raise gr.Error(f"Error loading model from {model_path}. Check path and files. Original error: {e}")
+        raise gr.Error(f"Error loading model from {model_dir}. Check path and files. Original error: {e}")
     inputs = image_processor(images=input_image, return_tensors="pt")
     with torch.no_grad(): outputs = model(**inputs)
     probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)[0]
@@ -376,7 +383,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.Textbox(label="Model Path", value="./", info="Path to the directory containing model files.")
+                inf_model_path = gr.FileExplorer(label="Select Model Directory", file_count="single", root_dir=".")
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
             with gr.Column(scale=1):
