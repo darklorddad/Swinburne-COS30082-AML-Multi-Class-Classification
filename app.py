@@ -464,28 +464,30 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         with gr.Row():
             with gr.Column(scale=1):
                 inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices())
+                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
+            with gr.Column(scale=1):
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
-            with gr.Column(scale=1):
-                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
-        with gr.Accordion("Training Metrics", open=False):
-            with gr.Row():
-                inf_plot_loss = gr.Plot(label="Loss")
-                inf_plot_acc = gr.Plot(label="Accuracy")
-                inf_plot_lr = gr.Plot(label="Learning Rate")
-            with gr.Row():
-                inf_plot_grad = gr.Plot(label="Gradient Norm")
-                inf_plot_f1 = gr.Plot(label="F1 Scores")
-                inf_plot_prec = gr.Plot(label="Precision")
-            with gr.Row():
-                inf_plot_recall = gr.Plot(label="Recall")
-                inf_plot_epoch = gr.Plot(label="Epoch")
-                inf_plot_runtime = gr.Plot(label="Eval Runtime")
-            with gr.Row():
-                inf_plot_sps = gr.Plot(label="Eval Samples/sec")
-                inf_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
+        gr.Markdown("## Training Metrics")
+        with gr.Row():
+            inf_plot_loss = gr.Plot(label="Loss")
+            inf_plot_acc = gr.Plot(label="Accuracy")
+        with gr.Row():
+            inf_plot_lr = gr.Plot(label="Learning Rate")
+            inf_plot_grad = gr.Plot(label="Gradient Norm")
+        with gr.Row():
+            inf_plot_f1 = gr.Plot(label="F1 Scores")
+            inf_plot_prec = gr.Plot(label="Precision")
+        with gr.Row():
+            inf_plot_recall = gr.Plot(label="Recall")
+            inf_plot_epoch = gr.Plot(label="Epoch")
+        with gr.Row():
+            inf_plot_runtime = gr.Plot(label="Eval Runtime")
+            inf_plot_sps = gr.Plot(label="Eval Samples/sec")
+        with gr.Row():
+            inf_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
 
         inf_plots = [
             inf_plot_loss, inf_plot_acc, inf_plot_lr, inf_plot_grad, inf_plot_f1,
