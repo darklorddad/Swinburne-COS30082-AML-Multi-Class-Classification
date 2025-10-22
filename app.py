@@ -407,9 +407,9 @@ def run_count_classes(target_dir, save_to_manifest, manifest_path):
     return run_with_log_capture(util_count_classes, target_dir, save_to_manifest, manifest_path)
 
 def show_model_charts(model_dir):
-    """Finds trainer_state.json in a directory and returns metric plots."""
+    """Finds trainer_state.json, returns metric plots, and the model_dir for sync."""
     if not model_dir:
-        return [None] * 11 + [gr.update(visible=False)]
+        return (None,) * 11 + (gr.update(visible=False), None)
 
     json_path = None
     for root, _, files in os.walk(model_dir):
@@ -419,7 +419,7 @@ def show_model_charts(model_dir):
 
     if not json_path:
         print(f"trainer_state.json not found in {model_dir}")
-        return [None] * 11 + [gr.update(visible=False)]
+        return (None,) * 11 + (gr.update(visible=False), model_dir)
 
     try:
         figures = util_plot_training_metrics(json_path)
@@ -428,11 +428,12 @@ def show_model_charts(model_dir):
             figures.get('Gradient Norm'), figures.get('F1 Scores'), figures.get('Precision'),
             figures.get('Recall'), figures.get('Epoch'), figures.get('Eval Runtime'),
             figures.get('Eval Samples/sec'), figures.get('Eval Steps/sec'),
-            gr.update(visible=True)
+            gr.update(visible=True),
+            model_dir
         )
     except Exception as e:
         print(f"Error generating plots for {json_path}: {e}")
-        return [None] * 11 + [gr.update(visible=False)]
+        return (None,) * 11 + (gr.update(visible=False), model_dir)
 
 def run_plot_metrics(json_path):
     try:
@@ -473,7 +474,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
 
     with gr.Tab("Training Metrics"):
         gr.Markdown("## Training Metrics for Selected Model")
-        gr.Markdown("Select a model from the 'Inference' tab to view its training metrics here.")
+        metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
         with gr.Column(visible=False) as inf_plots_container:
             with gr.Row():
                 inf_plot_loss = gr.Plot(label="Loss")
@@ -498,7 +499,16 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             inf_plot_prec, inf_plot_recall, inf_plot_epoch, inf_plot_runtime,
             inf_plot_sps, inf_plot_steps_ps
         ]
-        inf_model_path.change(fn=show_model_charts, inputs=[inf_model_path], outputs=inf_plots + [inf_plots_container])
+        inf_model_path.change(
+            fn=show_model_charts,
+            inputs=[inf_model_path],
+            outputs=inf_plots + [inf_plots_container, metrics_model_path]
+        )
+        metrics_model_path.change(
+            fn=show_model_charts,
+            inputs=[metrics_model_path],
+            outputs=inf_plots + [inf_plots_container, inf_model_path]
+        )
 
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
