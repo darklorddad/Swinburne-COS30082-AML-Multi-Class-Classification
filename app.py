@@ -382,7 +382,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
         gr.Markdown("Upload an image of a bird and select a trained model to get the top-5 predictions.")
         with gr.Row():
             with gr.Column(scale=1):
-                with gr.Box():
+                with gr.Group():
                     inf_model_path = gr.Textbox(label="Model Path", value="./", info="Path to the directory containing model files.")
                     inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                     inf_button = gr.Button("Classify", variant="primary")
@@ -394,21 +394,21 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
         gr.Markdown("## Tools for Preparing Your Dataset")
         gr.Markdown("A step-by-step workflow to get your raw data ready for training.")
         with gr.Accordion("1. Organise Raw Dataset from CUB-200 Format", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Moves images from `Train` and `Test` folders into class-named subdirectories based on `train.txt` and `test.txt` annotations.")
                 prep_org_basedir = gr.Textbox(label="Base Dataset Directory", placeholder="e.g., 'C:/Users/Me/Downloads/CUB_200_2011'", info="The root directory containing Train/, Test/, train.txt, and test.txt.")
                 prep_org_button = gr.Button("Organise Dataset", variant="secondary")
                 prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
                 prep_org_button.click(run_organise_dataset, inputs=[prep_org_basedir], outputs=prep_org_log)
         with gr.Accordion("2. Normalise Class Directory Names", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Converts all class subdirectory names in a directory to lowercase to ensure consistency.")
                 prep_norm_class_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory containing the class folders (e.g., Processed_Dataset).")
                 prep_norm_class_button = gr.Button("Normalise Class Names", variant="secondary")
                 prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
                 prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
         with gr.Accordion("3. Normalise Image Filenames", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Clean up image filenames by converting them to lowercase and/or standardising them to a `class_name_####.ext` format.")
                 prep_norm_img_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory where class folders are located.")
                 with gr.Row():
@@ -418,7 +418,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
                 prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
                 prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
         with gr.Accordion("4. Split Dataset for AutoTrain", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Splits the dataset into `_train` and `_validation` sets, suitable for use with tools like Hugging Face AutoTrain.")
                 prep_split_source = gr.Textbox(label="Source Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory containing the final, cleaned class folders.")
                 prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'", info="A prefix for the output folders (e.g., 'autotrain_dataset_train').")
@@ -431,7 +431,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
         gr.Markdown("## Tools for Analysis and File Management")
         gr.Markdown("Inspect your training process, analyse dataset characteristics, and perform file management tasks.")
         with gr.Accordion("Plot Training Metrics", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Visualise training and evaluation metrics by loading a `trainer_state.json` file from a Hugging Face Trainer output directory.")
                 analysis_plot_path = gr.Textbox(label="Path to trainer_state.json", info="e.g., './model_output/checkpoint-1000/trainer_state.json'")
                 analysis_plot_button = gr.Button("Generate Plots", variant="secondary")
@@ -441,7 +441,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
                     analysis_plot_lr = gr.Plot(label="Learning Rate")
                 analysis_plot_button.click(run_plot_metrics, inputs=[analysis_plot_path], outputs=[analysis_plot_loss, analysis_plot_acc, analysis_plot_lr])
         with gr.Accordion("Check Dataset Balance", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Analyse the class distribution of a dataset from a manifest file to check for imbalances.")
                 analysis_balance_path = gr.Textbox(label="Path to Manifest File", info="Select a manifest file generated by the 'Generate Directory Manifest' utility.")
                 analysis_balance_button = gr.Button("Analyse Balance", variant="secondary")
@@ -450,7 +450,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
                     analysis_balance_plot = gr.Plot(label="Class Distribution")
                 analysis_balance_button.click(run_check_balance, inputs=[analysis_balance_path], outputs=[analysis_balance_log, analysis_balance_plot])
         with gr.Accordion("Count Classes in Directory", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Counts the number of subdirectories (classes) and files (items) within a given directory.")
                 util_count_dir = gr.Textbox(label="Dataset Directory", info="The directory containing class subfolders.")
                 with gr.Row():
@@ -460,7 +460,7 @@ with gr.Blocks(theme=gr.themes.Glass(), title="Bird Classification Toolkit") as 
                 util_count_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
                 util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
-            with gr.Box():
+            with gr.Group():
                 gr.Markdown("Creates a manifest file listing all files in a directory, which is useful for analysis or providing context to LLMs.")
                 util_manifest_dir = gr.Textbox(label="Target Directory", info="The directory you want to scan.")
                 util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md", info="The name of the manifest file to create.")
