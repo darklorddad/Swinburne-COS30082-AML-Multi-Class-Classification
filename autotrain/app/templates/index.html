@@ -162,11 +162,11 @@
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-            <a href="https://huggingface.co/autotrain" target="_blank" class="flex items-center ps-2.5 mb-5">
+            <a href="https://huggingface.co/autotrain" target="_blank" class="flex items-center ps-2.5 mb-5 hidden">
                 <img src="https://raw.githubusercontent.com/huggingface/autotrain-advanced/main/static/logo.png"
                     class="h-6 me-3 sm:h-7" alt="AutoTrain Logo" />
             </a>
-            <hr class="mb-2 border-gray-200 dark:border-gray-700">
+            <hr class="mb-2 border-gray-200 dark:border-gray-700 hidden">
             <ul class="space-y-2 font-medium">
                 <li>
                     <label for="autotrain_user" class="text-sm font-medium text-gray-700 dark:text-gray-300">Hugging
@@ -228,7 +228,7 @@
                         </optgroup>
                     </select>
                 </li>
-                <li>
+                <li class="hidden">
                     <label for="hardware" class="text-sm font-medium text-gray-700 dark:text-gray-300">Hardware
                         <button type="button" id="hardware_info"
                             class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
@@ -311,7 +311,7 @@
                         <span class="ms-3">Logs</span>
                     </a>
                 </li>
-                <li>
+                <li class="hidden">
                     <a href="https://huggingface.co/docs/autotrain" target="_blank"
                         class="flex items-center p-2 text-gray-900 dark:text-gray-100 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-gray-400 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-gray-100"
@@ -323,7 +323,7 @@
                         <span class="ms-3">Documentation</span>
                     </a>
                 </li>
-                <li>
+                <li class="hidden">
                     <a href="https://huggingface.co/docs/autotrain/faq" target="_blank"
                         class="flex items-center p-2 text-gray-900 dark:text-gray-100 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-gray-400 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-gray-100"
@@ -335,7 +335,7 @@
                         <span class="ms-3">FAQs</span>
                     </a>
                 </li>
-                <li>
+                <li class="hidden">
                     <a href="https://github.com/huggingface/autotrain-advanced" target="_blank"
                         class="flex items-center p-2 text-gray-900 dark:text-gray-100 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-gray-400 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-gray-100"
