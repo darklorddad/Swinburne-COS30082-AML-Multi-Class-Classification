@@ -512,16 +512,19 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
         with gr.Accordion("1. Organise Raw Dataset", open=False):
+            gr.Markdown("Organises a raw dataset (like CUB_200_2011) into a structured format. It reads `train.txt` and `test.txt` to move images from `Train/` and `Test/` subdirectories into class-specific folders inside a `Processed_Dataset` directory.")
             prep_org_basedir = gr.Textbox(label="Base Dataset Directory", placeholder="e.g., 'C:/Users/Me/Downloads/CUB_200_2011'")
             prep_org_button = gr.Button("Organise Dataset")
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_basedir], outputs=prep_org_log)
         with gr.Accordion("2. Normalise Class Directory Names", open=False):
+            gr.Markdown("Renames all class subdirectories within a target directory to be lowercase. This helps ensure consistency, which is important for many training frameworks.")
             prep_norm_class_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
             prep_norm_class_button = gr.Button("Normalise Class Names")
             prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
         with gr.Accordion("3. Normalise Image Filenames", open=False):
+            gr.Markdown("Processes image filenames within a directory. It can convert all filenames to lowercase and/or standardise them into a `class_name_xxxx.ext` format. This is useful for cleaning up dataset naming conventions.")
             prep_norm_img_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
             prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)")
@@ -529,6 +532,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
         with gr.Accordion("4. Split Dataset for AutoTrain", open=False):
+            gr.Markdown("Splits a structured dataset into `training` and `validation` sets, suitable for use with tools like AutoTrain. It ensures that each class has a minimum number of images in both splits and creates a manifest file detailing the results.")
             prep_split_source = gr.Textbox(label="Source Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
             prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'")
             prep_split_min = gr.Number(label="Min Images Per Split", value=5)
@@ -539,12 +543,14 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Analysis & Utilities"):
         gr.Markdown("## Tools for Analysis and File Management")
         with gr.Accordion("Check Dataset Balance", open=False):
+            gr.Markdown("Analyses a dataset manifest file to check for class imbalance. It provides a summary of image counts per class and generates a bar chart to visualise the distribution.")
             analysis_balance_path = gr.Textbox(label="Path to Manifest File")
             analysis_balance_button = gr.Button("Analyse Balance")
             analysis_balance_log = gr.Textbox(label="Summary", interactive=False, lines=10)
             analysis_balance_plot = gr.Plot(label="Class Distribution")
             analysis_balance_button.click(run_check_balance, inputs=[analysis_balance_path], outputs=[analysis_balance_log, analysis_balance_plot])
         with gr.Accordion("Count Classes in Directory", open=False):
+            gr.Markdown("Counts the number of subdirectories (classes) and the number of files (items) within each class in a given directory. It can optionally save this information to a markdown manifest file.")
             util_count_dir = gr.Textbox(label="Dataset Directory")
             util_count_save = gr.Checkbox(label="Save to manifest file")
             util_count_path = gr.Textbox(label="Manifest File Path", value="class_counts.md")
@@ -552,6 +558,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_count_log = gr.Textbox(label="Log", interactive=False, lines=10)
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
+            gr.Markdown("Creates a manifest file listing all files within a specified directory and its subdirectories. It's useful for getting an overview of a project's structure or for creating file lists for other processes.")
             util_manifest_dir = gr.Textbox(label="Target Directory")
             util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md")
             util_manifest_button = gr.Button("Generate Manifest")
