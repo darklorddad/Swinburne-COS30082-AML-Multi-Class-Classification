@@ -38,7 +38,7 @@ def plot_training_metrics(json_path, save_dir=None):
     if 'step' in eval_df.columns:
         eval_df['step'] = pd.to_numeric(eval_df['step'])
 
-    fig, axs = plt.subplots(2, 2, figsize=(15, 10))
+    fig, axs = plt.subplots(4, 2, figsize=(15, 20))
     fig.suptitle('Training and Evaluation Metrics', fontsize=16)
 
     # Plot 1: Loss (Training and Evaluation)
@@ -70,19 +70,66 @@ def plot_training_metrics(json_path, save_dir=None):
     axs[1, 0].legend()
     axs[1, 0].grid(True)
 
-    # Plot 4: Evaluation F1 Scores
-    if not eval_df.empty and 'step' in eval_df.columns:
-        if 'eval_f1_macro' in eval_df.columns:
-            axs[1, 1].plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o', linestyle='-')
-        if 'eval_f1_micro' in eval_df.columns:
-            axs[1, 1].plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x', linestyle='--')
-        if 'eval_f1_weighted' in eval_df.columns:
-            axs[1, 1].plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s', linestyle=':')
+    # Plot 4: Grad Norm
+    if not train_df.empty and 'step' in train_df.columns and 'grad_norm' in train_df.columns:
+        axs[1, 1].plot(train_df['step'], train_df['grad_norm'], label='Grad Norm', marker='o', linestyle='-', color='purple')
     axs[1, 1].set_xlabel('Step')
-    axs[1, 1].set_ylabel('F1 Score')
-    axs[1, 1].set_title('Evaluation F1 Scores')
+    axs[1, 1].set_ylabel('Grad Norm')
+    axs[1, 1].set_title('Gradient Norm')
     axs[1, 1].legend()
     axs[1, 1].grid(True)
+
+    # Plot 5: Evaluation F1 Scores
+    if not eval_df.empty and 'step' in eval_df.columns:
+        if 'eval_f1_macro' in eval_df.columns:
+            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o', linestyle='-')
+        if 'eval_f1_micro' in eval_df.columns:
+            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x', linestyle='--')
+        if 'eval_f1_weighted' in eval_df.columns:
+            axs[2, 0].plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s', linestyle=':')
+    axs[2, 0].set_xlabel('Step')
+    axs[2, 0].set_ylabel('F1 Score')
+    axs[2, 0].set_title('Evaluation F1 Scores')
+    axs[2, 0].legend()
+    axs[2, 0].grid(True)
+
+    # Plot 6: Evaluation Precision Scores
+    if not eval_df.empty and 'step' in eval_df.columns:
+        if 'eval_precision_macro' in eval_df.columns:
+            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_macro'], label='Precision Macro', marker='o', linestyle='-')
+        if 'eval_precision_micro' in eval_df.columns:
+            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_micro'], label='Precision Micro', marker='x', linestyle='--')
+        if 'eval_precision_weighted' in eval_df.columns:
+            axs[2, 1].plot(eval_df['step'], eval_df['eval_precision_weighted'], label='Precision Weighted', marker='s', linestyle=':')
+    axs[2, 1].set_xlabel('Step')
+    axs[2, 1].set_ylabel('Precision Score')
+    axs[2, 1].set_title('Evaluation Precision Scores')
+    axs[2, 1].legend()
+    axs[2, 1].grid(True)
+
+    # Plot 7: Evaluation Recall Scores
+    if not eval_df.empty and 'step' in eval_df.columns:
+        if 'eval_recall_macro' in eval_df.columns:
+            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_macro'], label='Recall Macro', marker='o', linestyle='-')
+        if 'eval_recall_micro' in eval_df.columns:
+            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_micro'], label='Recall Micro', marker='x', linestyle='--')
+        if 'eval_recall_weighted' in eval_df.columns:
+            axs[3, 0].plot(eval_df['step'], eval_df['eval_recall_weighted'], label='Recall Weighted', marker='s', linestyle=':')
+    axs[3, 0].set_xlabel('Step')
+    axs[3, 0].set_ylabel('Recall Score')
+    axs[3, 0].set_title('Evaluation Recall Scores')
+    axs[3, 0].legend()
+    axs[3, 0].grid(True)
+
+    # Plot 8: Epoch Progression
+    if not df.empty and 'step' in df.columns and 'epoch' in df.columns:
+        epoch_df = df[['step', 'epoch']].dropna().drop_duplicates('step').sort_values('step')
+        axs[3, 1].plot(epoch_df['step'], epoch_df['epoch'], label='Epoch', marker='.', linestyle='-')
+    axs[3, 1].set_xlabel('Step')
+    axs[3, 1].set_ylabel('Epoch')
+    axs[3, 1].set_title('Epoch Progression')
+    axs[3, 1].legend()
+    axs[3, 1].grid(True)
 
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
