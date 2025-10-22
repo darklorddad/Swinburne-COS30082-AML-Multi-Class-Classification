@@ -5,7 +5,7 @@
 
 ### Project Overview
 
-This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, making use of deep learning techniques.
+This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, using deep learning techniques.
 
 ---
 
