@@ -383,7 +383,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.FileExplorer(label="Select Model Directory", file_count="single", root_dir=".")
+                inf_model_path = gr.FileExplorer(label="Select Model Directory", file_count="single", root_dir=".", glob="Model-*")
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
             with gr.Column(scale=1):
