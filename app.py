@@ -370,7 +370,7 @@ def run_plot_metrics(json_path):
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Soft(), title="Bird Classification Toolkit") as demo:
+with gr.Blocks(theme=gr.themes.Monochrome(), title="Bird Classification Toolkit") as demo:
     gr.Markdown("# Bird Species Classification Toolkit")
 
     with gr.Tab("Inference"):
