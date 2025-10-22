@@ -121,29 +121,6 @@
         createColumnMappings(document.querySelector('select#task').value);
     });
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const taskSelect = document.getElementById('task');
-        const validDataTab = document.getElementById('valid-data-tab');
-
-        function toggleValidationTab() {
-            const task = taskSelect.value;
-            // Check if the selected task is any LLM task
-            if (task.includes('llm:')) {
-                validDataTab.style.display = 'none'; // Hide the tab
-            } else {
-                validDataTab.style.display = 'block'; // Show the tab
-            }
-        }
-
-        // Initialize the state of the validation tab
-        toggleValidationTab();
-
-        // Add event listener for changes in the task dropdown
-        taskSelect.addEventListener('change', toggleValidationTab);
-    });
-
-</script>
 
 <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <button data-drawer-target="separator-sidebar" data-drawer-toggle="separator-sidebar"
