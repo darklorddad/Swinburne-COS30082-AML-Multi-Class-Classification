@@ -278,17 +278,57 @@ def util_plot_training_metrics(json_path):
     figures = {}
     # Plot Loss
     fig_loss, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Training vs. Evaluation Loss')
-    if not train_df.empty: ax.plot(train_df['step'], train_df['loss'], label='Training Loss', marker='o')
-    if not eval_df.empty: ax.plot(eval_df['step'], eval_df['eval_loss'], label='Evaluation Loss', marker='x')
+    if 'loss' in train_df: ax.plot(train_df['step'], train_df['loss'], label='Training Loss', marker='o')
+    if 'eval_loss' in eval_df: ax.plot(eval_df['step'], eval_df['eval_loss'], label='Evaluation Loss', marker='x')
     ax.legend(); ax.grid(True); figures['Loss'] = fig_loss
     # Plot Accuracy
     fig_acc, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Accuracy')
-    if not eval_df.empty: ax.plot(eval_df['step'], eval_df['eval_accuracy'], label='Evaluation Accuracy', marker='o', color='g')
+    if 'eval_accuracy' in eval_df: ax.plot(eval_df['step'], eval_df['eval_accuracy'], label='Evaluation Accuracy', marker='o', color='g')
     ax.legend(); ax.grid(True); figures['Accuracy'] = fig_acc
     # Plot Learning Rate
     fig_lr, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Learning Rate Schedule')
-    if not train_df.empty: ax.plot(train_df['step'], train_df['learning_rate'], label='Learning Rate', marker='o', color='r')
+    if 'learning_rate' in train_df: ax.plot(train_df['step'], train_df['learning_rate'], label='Learning Rate', marker='o', color='r')
     ax.legend(); ax.grid(True); figures['Learning Rate'] = fig_lr
+    # Plot Grad Norm
+    fig_gn, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Gradient Norm')
+    if 'grad_norm' in train_df: ax.plot(train_df['step'], train_df['grad_norm'], label='Grad Norm', marker='o', color='purple')
+    ax.legend(); ax.grid(True); figures['Gradient Norm'] = fig_gn
+    # Plot F1
+    fig_f1, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation F1 Scores')
+    if 'eval_f1_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o')
+    if 'eval_f1_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x')
+    if 'eval_f1_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s')
+    ax.legend(); ax.grid(True); figures['F1 Scores'] = fig_f1
+    # Plot Precision
+    fig_prec, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Precision Scores')
+    if 'eval_precision_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_macro'], label='Precision Macro', marker='o')
+    if 'eval_precision_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_micro'], label='Precision Micro', marker='x')
+    if 'eval_precision_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_weighted'], label='Precision Weighted', marker='s')
+    ax.legend(); ax.grid(True); figures['Precision'] = fig_prec
+    # Plot Recall
+    fig_recall, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Recall Scores')
+    if 'eval_recall_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_macro'], label='Recall Macro', marker='o')
+    if 'eval_recall_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_micro'], label='Recall Micro', marker='x')
+    if 'eval_recall_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_weighted'], label='Recall Weighted', marker='s')
+    ax.legend(); ax.grid(True); figures['Recall'] = fig_recall
+    # Plot Epoch
+    fig_epoch, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Epoch Progression')
+    if 'epoch' in df:
+        epoch_df = df[['step', 'epoch']].dropna().drop_duplicates('step').sort_values('step')
+        ax.plot(epoch_df['step'], epoch_df['epoch'], label='Epoch', marker='.')
+    ax.legend(); ax.grid(True); figures['Epoch'] = fig_epoch
+    # Plot Eval Runtime
+    fig_runtime, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Runtime')
+    if 'eval_runtime' in eval_df: ax.plot(eval_df['step'], eval_df['eval_runtime'], label='Eval Runtime', marker='o')
+    ax.legend(); ax.grid(True); figures['Eval Runtime'] = fig_runtime
+    # Plot Eval Samples Per Second
+    fig_sps, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Samples Per Second')
+    if 'eval_samples_per_second' in eval_df: ax.plot(eval_df['step'], eval_df['eval_samples_per_second'], label='Eval Samples/sec', marker='o')
+    ax.legend(); ax.grid(True); figures['Eval Samples/sec'] = fig_sps
+    # Plot Eval Steps Per Second
+    fig_steps_ps, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Steps Per Second')
+    if 'eval_steps_per_second' in eval_df: ax.plot(eval_df['step'], eval_df['eval_steps_per_second'], label='Eval Steps/sec', marker='o')
+    ax.legend(); ax.grid(True); figures['Eval Steps/sec'] = fig_steps_ps
     return figures
 
 # #############################################################################
@@ -366,10 +406,42 @@ def run_check_balance(manifest_path):
 def run_count_classes(target_dir, save_to_manifest, manifest_path):
     return run_with_log_capture(util_count_classes, target_dir, save_to_manifest, manifest_path)
 
+def show_model_charts(model_dir):
+    """Finds trainer_state.json in a directory and returns metric plots."""
+    if not model_dir:
+        return [None] * 11
+
+    json_path = None
+    for root, _, files in os.walk(model_dir):
+        if 'trainer_state.json' in files:
+            json_path = os.path.join(root, 'trainer_state.json')
+            break
+
+    if not json_path:
+        print(f"trainer_state.json not found in {model_dir}")
+        return [None] * 11
+
+    try:
+        figures = util_plot_training_metrics(json_path)
+        return (
+            figures.get('Loss'), figures.get('Accuracy'), figures.get('Learning Rate'),
+            figures.get('Gradient Norm'), figures.get('F1 Scores'), figures.get('Precision'),
+            figures.get('Recall'), figures.get('Epoch'), figures.get('Eval Runtime'),
+            figures.get('Eval Samples/sec'), figures.get('Eval Steps/sec')
+        )
+    except Exception as e:
+        print(f"Error generating plots for {json_path}: {e}")
+        return [None] * 11
+
 def run_plot_metrics(json_path):
     try:
         figures = util_plot_training_metrics(json_path)
-        return figures.get('Loss'), figures.get('Accuracy'), figures.get('Learning Rate')
+        return (
+            figures.get('Loss'), figures.get('Accuracy'), figures.get('Learning Rate'),
+            figures.get('Gradient Norm'), figures.get('F1 Scores'), figures.get('Precision'),
+            figures.get('Recall'), figures.get('Epoch'), figures.get('Eval Runtime'),
+            figures.get('Eval Samples/sec'), figures.get('Eval Steps/sec')
+        )
     except Exception as e:
         raise gr.Error(str(e))
 
@@ -397,6 +469,30 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             with gr.Column(scale=1):
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
+
+        with gr.Accordion("Training Metrics", open=False):
+            with gr.Row():
+                inf_plot_loss = gr.Plot(label="Loss")
+                inf_plot_acc = gr.Plot(label="Accuracy")
+                inf_plot_lr = gr.Plot(label="Learning Rate")
+            with gr.Row():
+                inf_plot_grad = gr.Plot(label="Gradient Norm")
+                inf_plot_f1 = gr.Plot(label="F1 Scores")
+                inf_plot_prec = gr.Plot(label="Precision")
+            with gr.Row():
+                inf_plot_recall = gr.Plot(label="Recall")
+                inf_plot_epoch = gr.Plot(label="Epoch")
+                inf_plot_runtime = gr.Plot(label="Eval Runtime")
+            with gr.Row():
+                inf_plot_sps = gr.Plot(label="Eval Samples/sec")
+                inf_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
+
+        inf_plots = [
+            inf_plot_loss, inf_plot_acc, inf_plot_lr, inf_plot_grad, inf_plot_f1,
+            inf_plot_prec, inf_plot_recall, inf_plot_epoch, inf_plot_runtime,
+            inf_plot_sps, inf_plot_steps_ps
+        ]
+        inf_model_path.change(fn=show_model_charts, inputs=[inf_model_path], outputs=inf_plots)
 
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
@@ -434,7 +530,24 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
                 analysis_plot_loss = gr.Plot(label="Loss")
                 analysis_plot_acc = gr.Plot(label="Accuracy")
                 analysis_plot_lr = gr.Plot(label="Learning Rate")
-            analysis_plot_button.click(run_plot_metrics, inputs=[analysis_plot_path], outputs=[analysis_plot_loss, analysis_plot_acc, analysis_plot_lr])
+            with gr.Row():
+                analysis_plot_grad = gr.Plot(label="Gradient Norm")
+                analysis_plot_f1 = gr.Plot(label="F1 Scores")
+                analysis_plot_prec = gr.Plot(label="Precision")
+            with gr.Row():
+                analysis_plot_recall = gr.Plot(label="Recall")
+                analysis_plot_epoch = gr.Plot(label="Epoch")
+                analysis_plot_runtime = gr.Plot(label="Eval Runtime")
+            with gr.Row():
+                analysis_plot_sps = gr.Plot(label="Eval Samples/sec")
+                analysis_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
+
+            analysis_plots = [
+                analysis_plot_loss, analysis_plot_acc, analysis_plot_lr, analysis_plot_grad,
+                analysis_plot_f1, analysis_plot_prec, analysis_plot_recall, analysis_plot_epoch,
+                analysis_plot_runtime, analysis_plot_sps, analysis_plot_steps_ps
+            ]
+            analysis_plot_button.click(run_plot_metrics, inputs=[analysis_plot_path], outputs=analysis_plots)
         with gr.Accordion("Check Dataset Balance", open=False):
             analysis_balance_path = gr.Textbox(label="Path to Manifest File")
             analysis_balance_button = gr.Button("Analyse Balance")
