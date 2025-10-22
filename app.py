@@ -465,11 +465,11 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_input_image = gr.Image(type="pil", label="Upload a bird image")
-                inf_button = gr.Button("Classify", variant="primary")
-            with gr.Column(scale=1):
                 inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
+                inf_input_image = gr.Image(type="pil", label="Upload a bird image")
+            with gr.Column(scale=1):
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
+                inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
     with gr.Tab("Training Metrics"):
