@@ -1,10 +1,10 @@
 .aider*
 dld*
-autotrain-advanced-main/
 Caltech-UCSD-Birds-200-(CUB-200)/Images/
-Test.zip
 Train.zip
-Dataset-*/
+Test.zip
+Dataset-Caltech/Dataset-Caltech-train.zip
+Dataset-Caltech/Dataset-Caltech-validation.zip
 Model-*/
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,1205 @@
+{
+    "included_classes": {
+        "house_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\house_wren",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "indigo_bunting": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\indigo_bunting",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "ivory_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\ivory_gull",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "kentucky_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\kentucky_warbler",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "laysan_albatross": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\laysan_albatross",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "lazuli_bunting": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\lazuli_bunting",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "le_conte_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\le_conte_sparrow",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "least_auklet": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\least_auklet",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "least_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\least_flycatcher",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "least_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\least_tern",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "lincoln_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\lincoln_sparrow",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "loggerhead_shrike": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\loggerhead_shrike",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "long_tailed_jaeger": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\long_tailed_jaeger",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "louisiana_waterthrush": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\louisiana_waterthrush",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "magnolia_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\magnolia_warbler",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "mallard": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\mallard",
+            "train": 18,
+            "validation": 5,
+            "total": 23
+        },
+        "mangrove_cuckoo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\mangrove_cuckoo",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "marsh_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\marsh_wren",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "mockingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\mockingbird",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "mourning_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\mourning_warbler",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "myrtle_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\myrtle_warbler",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "nashville_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\nashville_warbler",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "nelson_sharp_tailed_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\nelson_sharp_tailed_sparrow",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "nighthawk": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\nighthawk",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "northern_flicker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\northern_flicker",
+            "train": 30,
+            "validation": 8,
+            "total": 38
+        },
+        "northern_fulmar": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\northern_fulmar",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "northern_waterthrush": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\northern_waterthrush",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "olive_sided_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\olive_sided_flycatcher",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "orange_crowned_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\orange_crowned_warbler",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "orchard_oriole": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\orchard_oriole",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "ovenbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\ovenbird",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "pacific_loon": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pacific_loon",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "painted_bunting": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\painted_bunting",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "palm_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\palm_warbler",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "parakeet_auklet": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\parakeet_auklet",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "pelagic_cormorant": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pelagic_cormorant",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "philadelphia_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\philadelphia_vireo",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "pied_billed_grebe": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pied_billed_grebe",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "pied_kingfisher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pied_kingfisher",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "pigeon_guillemot": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pigeon_guillemot",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "pileated_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pileated_woodpecker",
+            "train": 31,
+            "validation": 8,
+            "total": 39
+        },
+        "pine_grosbeak": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pine_grosbeak",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "pine_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pine_warbler",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "pomarine_jaeger": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\pomarine_jaeger",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "prairie_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\prairie_warbler",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "prothonotary_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\prothonotary_warbler",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "purple_finch": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\purple_finch",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "red_bellied_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_bellied_woodpecker",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "red_breasted_merganser": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_breasted_merganser",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "red_cockaded_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_cockaded_woodpecker",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "red_eyed_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_eyed_vireo",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "red_faced_cormorant": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_faced_cormorant",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "red_headed_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_headed_woodpecker",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "red_legged_kittiwake": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_legged_kittiwake",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "red_winged_blackbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\red_winged_blackbird",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "rhinoceros_auklet": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\rhinoceros_auklet",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "ring_billed_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\ring_billed_gull",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "ringed_kingfisher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\ringed_kingfisher",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "rock_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\rock_wren",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "rose_breasted_grosbeak": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\rose_breasted_grosbeak",
+            "train": 16,
+            "validation": 5,
+            "total": 21
+        },
+        "ruby_throated_hummingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\ruby_throated_hummingbird",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "rufous_hummingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\rufous_hummingbird",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "rusty_blackbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\rusty_blackbird",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "sage_thrasher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\sage_thrasher",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "savannah_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\savannah_sparrow",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "sayornis": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\sayornis",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "scarlet_tanager": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\scarlet_tanager",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "scissor_tailed_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\scissor_tailed_flycatcher",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "scott_oriole": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\scott_oriole",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "seaside_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\seaside_sparrow",
+            "train": 18,
+            "validation": 5,
+            "total": 23
+        },
+        "shiny_cowbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\shiny_cowbird",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "slaty_backed_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\slaty_backed_gull",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "song_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\song_sparrow",
+            "train": 31,
+            "validation": 8,
+            "total": 39
+        },
+        "sooty_albatross": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\sooty_albatross",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "spotted_catbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\spotted_catbird",
+            "train": 15,
+            "validation": 5,
+            "total": 20
+        },
+        "summer_tanager": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\summer_tanager",
+            "train": 15,
+            "validation": 5,
+            "total": 20
+        },
+        "swainson_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\swainson_warbler",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "tennessee_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\tennessee_warbler",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "tree_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\tree_sparrow",
+            "train": 15,
+            "validation": 5,
+            "total": 20
+        },
+        "tree_swallow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\tree_swallow",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "tropical_kingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\tropical_kingbird",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "vermilion_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\vermilion_flycatcher",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "vesper_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\vesper_sparrow",
+            "train": 30,
+            "validation": 8,
+            "total": 38
+        },
+        "warbling_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\warbling_vireo",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "western_grebe": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\western_grebe",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "western_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\western_gull",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "western_meadowlark": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\western_meadowlark",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "western_wood_pewee": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\western_wood_pewee",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "whip_poor_will": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\whip_poor_will",
+            "train": 15,
+            "validation": 5,
+            "total": 20
+        },
+        "white_breasted_kingfisher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_breasted_kingfisher",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "white_breasted_nuthatch": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_breasted_nuthatch",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "white_crowned_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_crowned_sparrow",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "white_eyed_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_eyed_vireo",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "white_necked_raven": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_necked_raven",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "white_pelican": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_pelican",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "white_throated_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\white_throated_sparrow",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "wilson_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\wilson_warbler",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "winter_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\winter_wren",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "worm_eating_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\worm_eating_warbler",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "yellow_bellied_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_bellied_flycatcher",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "yellow_billed_cuckoo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_billed_cuckoo",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "yellow_breasted_chat": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_breasted_chat",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "yellow_headed_blackbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_headed_blackbird",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "yellow_throated_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_throated_vireo",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "yellow_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\yellow_warbler",
+            "train": 16,
+            "validation": 5,
+            "total": 21
+        },
+        "acadian_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\acadian_flycatcher",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "american_crow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\american_crow",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "american_goldfinch": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\american_goldfinch",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "american_pipit": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\american_pipit",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "american_redstart": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\american_redstart",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "american_three_toed_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\american_three_toed_woodpecker",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "anna_hummingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\anna_hummingbird",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "artic_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\artic_tern",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "baird_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\baird_sparrow",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "baltimore_oriole": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\baltimore_oriole",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "bank_swallow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bank_swallow",
+            "train": 18,
+            "validation": 5,
+            "total": 23
+        },
+        "barn_swallow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\barn_swallow",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "bay_breasted_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bay_breasted_warbler",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "belted_kingfisher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\belted_kingfisher",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "bewick_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bewick_wren",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "black_and_white_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_and_white_warbler",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "black_billed_cuckoo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_billed_cuckoo",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "black_capped_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_capped_vireo",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "black_footed_albatross": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_footed_albatross",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "black_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_tern",
+            "train": 16,
+            "validation": 5,
+            "total": 21
+        },
+        "black_throated_blue_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_throated_blue_warbler",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "black_throated_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\black_throated_sparrow",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "blue_grosbeak": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\blue_grosbeak",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "blue_headed_vireo": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\blue_headed_vireo",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "blue_jay": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\blue_jay",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "blue_winged_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\blue_winged_warbler",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "boat_tailed_grackle": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\boat_tailed_grackle",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "bobolink": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bobolink",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "bohemian_waxwing": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bohemian_waxwing",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "brandt_cormorant": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brandt_cormorant",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "brewer_blackbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brewer_blackbird",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "brewer_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brewer_sparrow",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "bronzed_cowbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\bronzed_cowbird",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "brown_creeper": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brown_creeper",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "brown_pelican": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brown_pelican",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "brown_thrasher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\brown_thrasher",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "cactus_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cactus_wren",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "california_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\california_gull",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "canada_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\canada_warbler",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "cape_glossy_starling": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cape_glossy_starling",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "cape_may_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cape_may_warbler",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "cardinal": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cardinal",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "carolina_wren": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\carolina_wren",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "caspian_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\caspian_tern",
+            "train": 30,
+            "validation": 8,
+            "total": 38
+        },
+        "cedar_waxwing": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cedar_waxwing",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "cerulean_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cerulean_warbler",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "chestnut_sided_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\chestnut_sided_warbler",
+            "train": 23,
+            "validation": 6,
+            "total": 29
+        },
+        "chipping_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\chipping_sparrow",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "chuck_will_widow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\chuck_will_widow",
+            "train": 16,
+            "validation": 5,
+            "total": 21
+        },
+        "clark_nutcracker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\clark_nutcracker",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "clay_colored_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\clay_colored_sparrow",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "cliff_swallow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\cliff_swallow",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "common_raven": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\common_raven",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "common_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\common_tern",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "common_yellowthroat": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\common_yellowthroat",
+            "train": 18,
+            "validation": 5,
+            "total": 23
+        },
+        "crested_auklet": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\crested_auklet",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "dark_eyed_junco": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\dark_eyed_junco",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "downy_woodpecker": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\downy_woodpecker",
+            "train": 30,
+            "validation": 8,
+            "total": 38
+        },
+        "eared_grebe": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\eared_grebe",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "eastern_towhee": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\eastern_towhee",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "elegant_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\elegant_tern",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "european_goldfinch": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\european_goldfinch",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "evening_grosbeak": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\evening_grosbeak",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "field_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\field_sparrow",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "fish_crow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\fish_crow",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        },
+        "florida_jay": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\florida_jay",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "forsters_tern": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\forsters_tern",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "fox_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\fox_sparrow",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "frigatebird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\frigatebird",
+            "train": 17,
+            "validation": 5,
+            "total": 22
+        },
+        "gadwall": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\gadwall",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "geococcyx": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\geococcyx",
+            "train": 19,
+            "validation": 5,
+            "total": 24
+        },
+        "glaucous_winged_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\glaucous_winged_gull",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "golden_winged_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\golden_winged_warbler",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "grasshopper_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\grasshopper_sparrow",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "gray_catbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\gray_catbird",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "gray_crowned_rosy_finch": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\gray_crowned_rosy_finch",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "gray_kingbird": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\gray_kingbird",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "great_crested_flycatcher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\great_crested_flycatcher",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "great_grey_shrike": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\great_grey_shrike",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "green_jay": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\green_jay",
+            "train": 30,
+            "validation": 7,
+            "total": 37
+        },
+        "green_kingfisher": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\green_kingfisher",
+            "train": 18,
+            "validation": 5,
+            "total": 23
+        },
+        "green_tailed_towhee": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\green_tailed_towhee",
+            "train": 27,
+            "validation": 7,
+            "total": 34
+        },
+        "green_violetear": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\green_violetear",
+            "train": 22,
+            "validation": 6,
+            "total": 28
+        },
+        "groove_billed_ani": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\groove_billed_ani",
+            "train": 28,
+            "validation": 7,
+            "total": 35
+        },
+        "harris_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\harris_sparrow",
+            "train": 20,
+            "validation": 5,
+            "total": 25
+        },
+        "heermann_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\heermann_gull",
+            "train": 22,
+            "validation": 5,
+            "total": 27
+        },
+        "henslow_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\henslow_sparrow",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "herring_gull": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\herring_gull",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "hooded_merganser": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\hooded_merganser",
+            "train": 26,
+            "validation": 7,
+            "total": 33
+        },
+        "hooded_oriole": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\hooded_oriole",
+            "train": 29,
+            "validation": 7,
+            "total": 36
+        },
+        "hooded_warbler": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\hooded_warbler",
+            "train": 21,
+            "validation": 5,
+            "total": 26
+        },
+        "horned_grebe": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\horned_grebe",
+            "train": 24,
+            "validation": 6,
+            "total": 30
+        },
+        "horned_lark": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\horned_lark",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "horned_puffin": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\horned_puffin",
+            "train": 26,
+            "validation": 6,
+            "total": 32
+        },
+        "house_sparrow": {
+            "original_path": "F:/Multi-class-classification/Caltech-UCSD-Birds-200-(CUB-200)/Images\\house_sparrow",
+            "train": 25,
+            "validation": 6,
+            "total": 31
+        }
+    },
+    "skipped_classes": {}
+}
