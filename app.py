@@ -14,123 +14,6 @@ import matplotlib.pyplot as plt
 from contextlib import redirect_stdout
 import io
 
-CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* General styles */
-body, .gradio-container {
-    font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
-}
-
-/* Main header styling */
-#main-header {
-    text-align: center;
-    padding: 2rem 1rem;
-    margin-bottom: 1rem;
-}
-#main-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 0.5rem;
-}
-#main-header p {
-    font-size: 1.125rem;
-    color: #4b5563;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Card style for Groups and Accordions */
-.gradio-group, .gradio-accordion {
-    border: 1px solid #e5e7eb !important;
-    border-radius: 12px !important;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-    background-color: white !important;
-    overflow: hidden; /* Ensures child elements respect the border radius */
-}
-
-/* Padding for content inside cards */
-.gradio-group, .gradio-accordion > .content {
-    padding: 20px !important;
-    gap: 20px !important;
-}
-
-/* Accordion header styling */
-.gradio-accordion > .label-wrap {
-    padding: 16px 20px !important;
-    background-color: white !important;
-}
-.gradio-accordion > .label-wrap:hover {
-    background-color: #f9fafb !important;
-}
-.gradio-accordion > .label-wrap + .content {
-    border-top: 1px solid #e5e7eb !important;
-}
-
-/* Button styling */
-.gradio-button {
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    padding: 10px !important;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-    transition: all 0.2s ease-in-out;
-}
-.gradio-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Primary button style */
-button.primary {
-    background: #4f46e5 !important;
-    color: white !important;
-    border: none !important;
-}
-button.primary:hover {
-    background: #4338ca !important;
-}
-
-/* Secondary button style */
-button.secondary {
-    background-color: #f9fafb !important;
-    color: #374151 !important;
-    border: 1px solid #d1d5db !important;
-}
-button.secondary:hover {
-    background-color: #f3f4f6 !important;
-}
-
-/* Tab styling */
-.tabs > .tab-nav {
-    border-bottom: 1px solid #e5e7eb;
-}
-.tabs > .tab-nav > button {
-    font-size: 1rem !important;
-    font-weight: 500 !important;
-    padding: 12px 16px !important;
-    border-radius: 8px 8px 0 0 !important;
-    border: none !important;
-    border-bottom: 2px solid transparent !important;
-    margin-right: 4px !important;
-    background: transparent !important;
-    color: #6b7280 !important;
-}
-.tabs > .tab-nav > button.selected {
-    background: transparent !important;
-    border-bottom: 2px solid #4f46e5 !important;
-    color: #111827 !important;
-}
-
-/* Footer */
-#footer {
-    text-align: center;
-    color: #9ca3af;
-    font-size: 0.875rem;
-    padding: 3rem 0 1rem 0;
-}
-"""
 
 # #############################################################################
 # CORE LOGIC FROM UTILITY SCRIPTS
@@ -487,97 +370,76 @@ def run_plot_metrics(json_path):
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Soft(primary_hue="indigo", secondary_hue="slate"), css=CSS, title="Bird Classification Toolkit") as demo:
-    gr.Markdown(
-        """
-        # 🐦 Bird Species Classification Toolkit
-        A complete suite of tools for bird image classification, from dataset preparation to model inference and analysis.
-        """,
-        elem_id="main-header"
-    )
+with gr.Blocks(theme=gr.themes.Soft(), title="Bird Classification Toolkit") as demo:
+    gr.Markdown("# Bird Species Classification Toolkit")
 
-    with gr.Tab("🔍 Inference"):
+    with gr.Tab("Inference"):
         gr.Markdown("## Classify a Bird Image")
-        gr.Markdown("Upload an image of a bird and select a trained model to get the top-5 predictions.")
         with gr.Row():
             with gr.Column(scale=1):
-                with gr.Group():
-                    inf_model_path = gr.Textbox(label="Model Path", value="./", info="Path to the directory containing model files.")
-                    inf_input_image = gr.Image(type="pil", label="Upload a bird image")
-                    inf_button = gr.Button("Classify", variant="primary")
+                inf_model_path = gr.Textbox(label="Model Path", value="./", info="Path to the directory containing model files.")
+                inf_input_image = gr.Image(type="pil", label="Upload a bird image")
+                inf_button = gr.Button("Classify", variant="primary")
             with gr.Column(scale=1):
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
-    with gr.Tab("🛠️ Data Preparation"):
+    with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
-        gr.Markdown("A step-by-step workflow to get your raw data ready for training.")
-        with gr.Accordion("1. Organise Raw Dataset from CUB-200 Format", open=False):
-            gr.Markdown("Moves images from `Train` and `Test` folders into class-named subdirectories based on `train.txt` and `test.txt` annotations.")
-            prep_org_basedir = gr.Textbox(label="Base Dataset Directory", placeholder="e.g., 'C:/Users/Me/Downloads/CUB_200_2011'", info="The root directory containing Train/, Test/, train.txt, and test.txt.")
-            prep_org_button = gr.Button("Organise Dataset", variant="secondary")
-            prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
+        with gr.Accordion("1. Organise Raw Dataset", open=False):
+            prep_org_basedir = gr.Textbox(label="Base Dataset Directory", placeholder="e.g., 'C:/Users/Me/Downloads/CUB_200_2011'")
+            prep_org_button = gr.Button("Organise Dataset")
+            prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_basedir], outputs=prep_org_log)
         with gr.Accordion("2. Normalise Class Directory Names", open=False):
-            gr.Markdown("Converts all class subdirectory names in a directory to lowercase to ensure consistency.")
-            prep_norm_class_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory containing the class folders (e.g., Processed_Dataset).")
-            prep_norm_class_button = gr.Button("Normalise Class Names", variant="secondary")
-            prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
+            prep_norm_class_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
+            prep_norm_class_button = gr.Button("Normalise Class Names")
+            prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
         with gr.Accordion("3. Normalise Image Filenames", open=False):
-            gr.Markdown("Clean up image filenames by converting them to lowercase and/or standardising them to a `class_name_####.ext` format.")
-            prep_norm_img_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory where class folders are located.")
+            prep_norm_img_dir = gr.Textbox(label="Target Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
             prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)")
-            prep_norm_img_button = gr.Button("Process Image Names", variant="secondary")
-            prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
+            prep_norm_img_button = gr.Button("Process Image Names")
+            prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
         with gr.Accordion("4. Split Dataset for AutoTrain", open=False):
-            gr.Markdown("Splits the dataset into `_train` and `_validation` sets, suitable for use with tools like Hugging Face AutoTrain.")
-            prep_split_source = gr.Textbox(label="Source Directory", placeholder="e.g., 'C:/.../Processed_Dataset'", info="The directory containing the final, cleaned class folders.")
-            prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'", info="A prefix for the output folders (e.g., 'autotrain_dataset_train').")
-            prep_split_min = gr.Number(label="Min Images Per Split", value=5, info="Minimum images required in both train and validation sets for a class to be included.")
-            prep_split_button = gr.Button("Split Dataset", variant="secondary")
-            prep_split_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
+            prep_split_source = gr.Textbox(label="Source Directory", placeholder="e.g., 'C:/.../Processed_Dataset'")
+            prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'")
+            prep_split_min = gr.Number(label="Min Images Per Split", value=5)
+            prep_split_button = gr.Button("Split Dataset")
+            prep_split_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_split_button.click(run_split_dataset, inputs=[prep_split_source, prep_split_output, prep_split_min], outputs=prep_split_log)
 
-    with gr.Tab("📊 Analysis & Utilities"):
+    with gr.Tab("Analysis & Utilities"):
         gr.Markdown("## Tools for Analysis and File Management")
-        gr.Markdown("Inspect your training process, analyse dataset characteristics, and perform file management tasks.")
         with gr.Accordion("Plot Training Metrics", open=False):
-            gr.Markdown("Visualise training and evaluation metrics by loading a `trainer_state.json` file from a Hugging Face Trainer output directory.")
-            analysis_plot_path = gr.Textbox(label="Path to trainer_state.json", info="e.g., './model_output/checkpoint-1000/trainer_state.json'")
-            analysis_plot_button = gr.Button("Generate Plots", variant="secondary")
+            analysis_plot_path = gr.Textbox(label="Path to trainer_state.json")
+            analysis_plot_button = gr.Button("Generate Plots")
             with gr.Row():
                 analysis_plot_loss = gr.Plot(label="Loss")
                 analysis_plot_acc = gr.Plot(label="Accuracy")
                 analysis_plot_lr = gr.Plot(label="Learning Rate")
             analysis_plot_button.click(run_plot_metrics, inputs=[analysis_plot_path], outputs=[analysis_plot_loss, analysis_plot_acc, analysis_plot_lr])
         with gr.Accordion("Check Dataset Balance", open=False):
-            gr.Markdown("Analyse the class distribution of a dataset from a manifest file to check for imbalances.")
-            analysis_balance_path = gr.Textbox(label="Path to Manifest File", info="Select a manifest file generated by the 'Generate Directory Manifest' utility.")
-            analysis_balance_button = gr.Button("Analyse Balance", variant="secondary")
-            with gr.Row():
-                analysis_balance_log = gr.Textbox(label="Summary", interactive=False, lines=10, max_lines=20)
-                analysis_balance_plot = gr.Plot(label="Class Distribution")
+            analysis_balance_path = gr.Textbox(label="Path to Manifest File")
+            analysis_balance_button = gr.Button("Analyse Balance")
+            analysis_balance_log = gr.Textbox(label="Summary", interactive=False, lines=10)
+            analysis_balance_plot = gr.Plot(label="Class Distribution")
             analysis_balance_button.click(run_check_balance, inputs=[analysis_balance_path], outputs=[analysis_balance_log, analysis_balance_plot])
         with gr.Accordion("Count Classes in Directory", open=False):
-            gr.Markdown("Counts the number of subdirectories (classes) and files (items) within a given directory.")
-            util_count_dir = gr.Textbox(label="Dataset Directory", info="The directory containing class subfolders.")
+            util_count_dir = gr.Textbox(label="Dataset Directory")
             util_count_save = gr.Checkbox(label="Save to manifest file")
-            util_count_path = gr.Textbox(label="Manifest File Path", value="class_counts.md", interactive=True)
-            util_count_button = gr.Button("Count Classes", variant="secondary")
-            util_count_log = gr.Textbox(label="Log", interactive=False, lines=10, max_lines=20)
+            util_count_path = gr.Textbox(label="Manifest File Path", value="class_counts.md")
+            util_count_button = gr.Button("Count Classes")
+            util_count_log = gr.Textbox(label="Log", interactive=False, lines=10)
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
-            gr.Markdown("Creates a manifest file listing all files in a directory, which is useful for analysis or providing context to LLMs.")
-            util_manifest_dir = gr.Textbox(label="Target Directory", info="The directory you want to scan.")
-            util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md", info="The name of the manifest file to create.")
-            util_manifest_button = gr.Button("Generate Manifest", variant="secondary")
-            util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5, max_lines=10)
+            util_manifest_dir = gr.Textbox(label="Target Directory")
+            util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md")
+            util_manifest_button = gr.Button("Generate Manifest")
+            util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
             util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
-
-    gr.Markdown("Built with Gradio and ❤️. A tool for the modern ornithologist.", elem_id="footer")
 
 if __name__ == "__main__":
     demo.launch()
