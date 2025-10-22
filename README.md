@@ -1,11 +1,11 @@
 # Multi-Class Classification (Bird Species)
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Licence: AGPL v3](https://img.shields.io/badge/Licence-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE)
 
 ### Project Overview
 
-This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, leveraging deep learning techniques.
+This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, making use of deep learning techniques.
 
 ---
 
@@ -58,8 +58,8 @@ Where `N` is the total number of testing images, `C` is the total number of clas
 
 ---
 
-### License
+### Licence
 
-This project is licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for full details.
+This project is licensed under the **GNU Affero General Public License v3.0**. See the [LICENCE](LICENSE) file for full details.
 
 Copyright (C) 2025 [darklorddad](https://github.com/darklorddad)
