@@ -1,33 +1,65 @@
-# Multi-Class Classification (Bird Species)
+# Bird Species Classification
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE)
 
-### Project Overview
+## 📝 Project Overview
 
-This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images.
+This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, leveraging deep learning techniques. A demonstration of the best-performing model is available as a Hugging Face web application.
 
 ---
 
-### Dataset
+## 🐦 Dataset
 
-The project uses the **Caltech-UCSD Birds 200 (CUB-200)** dataset. This dataset is a challenging image dataset containing photos of 200 bird species.
+The project uses the **Caltech-UCSD Birds 200 (CUB-200)** dataset. This is a challenging image dataset containing photos of 200 bird species, primarily from North America.
 
 - **Total Species:** 200
 - **Training Images:** 4,829
+- **Class Distribution:** The number of images per class is imbalanced, ranging from 20 to 39 images per species in the training set.
+- **Official Page:** [http://www.vision.caltech.edu/visipedia/CUB-200.html](http://www.vision.caltech.edu/visipedia/CUB-200.html)
 
 ---
 
-### Evaluation
+## 🧠 Methodology
+
+Several models were trained to find the best-performing architecture for this classification task. The approach uses transfer learning, fine-tuning pre-trained models that have demonstrated strong performance on general image classification tasks. The base models explored include:
+
+-   **FocalNet:** `microsoft/focalnet-base`
+-   **Swin Transformer:** `XinWenMonash/swin_transformer`
+-   **Swin Tiny:** `microsoft/swin-tiny-patch4-window7-224`
+-   **Swin Tiny (fine-tuned on EuroSAT):** `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat`
+
+All models were trained using the AutoTrain library.
+
+---
+
+## 📊 Results
+
+The performance of each model was evaluated on the test set. The Swin Transformer model from `XinWenMonash/swin_transformer` achieved the highest accuracy.
+
+| Model | Base Model | Accuracy | F1 (Macro) |
+| :--- | :--- | :---: | :---: |
+| Swin Transformer | `XinWenMonash/swin_transformer` | **88.85%** | **0.8861** |
+| FocalNet Base | `microsoft/focalnet-base` | 82.62% | 0.8157 |
+| Swin Tiny (EuroSAT) | `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | 80.00% | 0.7928 |
+| Swin Tiny | `microsoft/swin-tiny-patch4-window7-224` | 78.44% | 0.7758 |
+
+---
+
+## 📈 Evaluation
 
 The model's performance is evaluated using two primary metrics:
 
 -   **Top-1 Accuracy:** The overall classification accuracy across all test images.
+    -   Formula: `Top-1 accuracy = (1/N) * Σ_k=1^N 1{argmax(y) == groundtruth}`
 -   **Average Accuracy Per Class:** The average of accuracies for each individual bird species, providing insight into the model's performance on a per-class basis.
+    -   Formula: `Ave = (1/C) * Σ_i=1^C T_i`
+
+Where `N` is the total number of testing images, `C` is the total number of classes, `y` is the output probabilities, and `T_i` is the average accuracy for class `C_i`.
 
 ---
 
-### License
+## 📜 License
 
 This project is licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for full details.
 
