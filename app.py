@@ -409,7 +409,7 @@ def run_count_classes(target_dir, save_to_manifest, manifest_path):
 def show_model_charts(model_dir):
     """Finds trainer_state.json in a directory and returns metric plots."""
     if not model_dir:
-        return [None] * 11
+        return [None] * 11 + [gr.update(visible=False)]
 
     json_path = None
     for root, _, files in os.walk(model_dir):
@@ -419,7 +419,7 @@ def show_model_charts(model_dir):
 
     if not json_path:
         print(f"trainer_state.json not found in {model_dir}")
-        return [None] * 11
+        return [None] * 11 + [gr.update(visible=False)]
 
     try:
         figures = util_plot_training_metrics(json_path)
@@ -427,11 +427,12 @@ def show_model_charts(model_dir):
             figures.get('Loss'), figures.get('Accuracy'), figures.get('Learning Rate'),
             figures.get('Gradient Norm'), figures.get('F1 Scores'), figures.get('Precision'),
             figures.get('Recall'), figures.get('Epoch'), figures.get('Eval Runtime'),
-            figures.get('Eval Samples/sec'), figures.get('Eval Steps/sec')
+            figures.get('Eval Samples/sec'), figures.get('Eval Steps/sec'),
+            gr.update(visible=True)
         )
     except Exception as e:
         print(f"Error generating plots for {json_path}: {e}")
-        return [None] * 11
+        return [None] * 11 + [gr.update(visible=False)]
 
 def run_plot_metrics(json_path):
     try:
@@ -457,44 +458,45 @@ def get_model_choices():
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
+with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)", css="#pred_label {min-height: 300px;}") as demo:
     gr.Markdown("# Multi-Class Classification (Bird Species)")
 
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices())
-                inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
+                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
+                inf_output_label = gr.Label(num_top_classes=5, label="Predictions", elem_id="pred_label")
             with gr.Column(scale=1):
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
                 inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
-        gr.Markdown("## Training Metrics")
-        with gr.Row():
-            inf_plot_loss = gr.Plot(label="Loss")
-            inf_plot_acc = gr.Plot(label="Accuracy")
-        with gr.Row():
-            inf_plot_lr = gr.Plot(label="Learning Rate")
-            inf_plot_grad = gr.Plot(label="Gradient Norm")
-        with gr.Row():
-            inf_plot_f1 = gr.Plot(label="F1 Scores")
-            inf_plot_prec = gr.Plot(label="Precision")
-        with gr.Row():
-            inf_plot_recall = gr.Plot(label="Recall")
-            inf_plot_epoch = gr.Plot(label="Epoch")
-        with gr.Row():
-            inf_plot_runtime = gr.Plot(label="Eval Runtime")
-            inf_plot_sps = gr.Plot(label="Eval Samples/sec")
-        with gr.Row():
-            inf_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
+        with gr.Column(visible=False) as inf_plots_container:
+            gr.Markdown("## Training Metrics")
+            with gr.Row():
+                inf_plot_loss = gr.Plot(label="Loss")
+                inf_plot_acc = gr.Plot(label="Accuracy")
+            with gr.Row():
+                inf_plot_lr = gr.Plot(label="Learning Rate")
+                inf_plot_grad = gr.Plot(label="Gradient Norm")
+            with gr.Row():
+                inf_plot_f1 = gr.Plot(label="F1 Scores")
+                inf_plot_prec = gr.Plot(label="Precision")
+            with gr.Row():
+                inf_plot_recall = gr.Plot(label="Recall")
+                inf_plot_epoch = gr.Plot(label="Epoch")
+            with gr.Row():
+                inf_plot_runtime = gr.Plot(label="Eval Runtime")
+                inf_plot_sps = gr.Plot(label="Eval Samples/sec")
+            with gr.Row():
+                inf_plot_steps_ps = gr.Plot(label="Eval Steps/sec")
 
         inf_plots = [
             inf_plot_loss, inf_plot_acc, inf_plot_lr, inf_plot_grad, inf_plot_f1,
             inf_plot_prec, inf_plot_recall, inf_plot_epoch, inf_plot_runtime,
             inf_plot_sps, inf_plot_steps_ps
         ]
-        inf_model_path.change(fn=show_model_charts, inputs=[inf_model_path], outputs=inf_plots)
+        inf_model_path.change(fn=show_model_charts, inputs=[inf_model_path], outputs=inf_plots + [inf_plots_container])
 
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
