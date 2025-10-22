@@ -1,26 +1,27 @@
-# Bird Species Classification
+# Multi-Class Classification (Bird Species)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE)
 
-## 📝 Project Overview
+### Project Overview
 
-This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, leveraging deep learning techniques. A demonstration of the best-performing model is available as a Hugging Face web application.
+This project tackles the challenge of fine-grained visual categorisation by classifying 200 different species of birds. The primary goal is to build and train a model that can accurately identify bird species from images, leveraging deep learning techniques.
 
 ---
 
-## 🐦 Dataset
+### Dataset
 
 The project uses the **Caltech-UCSD Birds 200 (CUB-200)** dataset. This is a challenging image dataset containing photos of 200 bird species, primarily from North America.
 
 - **Total Species:** 200
-- **Training Images:** 4,829
+- **Total Images:** 6,033
 - **Class Distribution:** The number of images per class is imbalanced, ranging from 20 to 39 images per species in the training set.
-- **Official Page:** [http://www.vision.caltech.edu/visipedia/CUB-200.html](http://www.vision.caltech.edu/visipedia/CUB-200.html)
+
+![Image](Caltech-UCSD-Birds-200-(CUB-200)\Class-distribution.png)
 
 ---
 
-## 🧠 Methodology
+### Methodology
 
 Several models were trained to find the best-performing architecture for this classification task. The approach uses transfer learning, fine-tuning pre-trained models that have demonstrated strong performance on general image classification tasks. The base models explored include:
 
@@ -29,11 +30,9 @@ Several models were trained to find the best-performing architecture for this cl
 -   **Swin Tiny:** `microsoft/swin-tiny-patch4-window7-224`
 -   **Swin Tiny (fine-tuned on EuroSAT):** `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat`
 
-All models were trained using the AutoTrain library.
-
 ---
 
-## 📊 Results
+### Results
 
 The performance of each model was evaluated on the test set. The Swin Transformer model from `XinWenMonash/swin_transformer` achieved the highest accuracy.
 
@@ -46,7 +45,7 @@ The performance of each model was evaluated on the test set. The Swin Transforme
 
 ---
 
-## 📈 Evaluation
+### Evaluation
 
 The model's performance is evaluated using two primary metrics:
 
@@ -59,7 +58,7 @@ Where `N` is the total number of testing images, `C` is the total number of clas
 
 ---
 
-## 📜 License
+### License
 
 This project is licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for full details.
 
