@@ -17,7 +17,7 @@ The project uses the **Caltech-UCSD Birds 200 (CUB-200)** dataset. This is a cha
 - **Total Images:** 6,033
 - **Class Distribution:** The number of images per class is imbalanced, ranging from 20 to 39 images per species in the training set.
 
-![Image](Caltech-UCSD-Birds-200-(CUB-200)\Class-distribution.png)
+![Image]([Caltech-UCSD-Birds-200-(CUB-200)\Class-distribution.png](https://github.com/darklorddad/Swinburne-COS30082-AML-Multi-Class-Classification-Bird-Species/blob/master/Caltech-UCSD-Birds-200-(CUB-200)/Class-distribution.png))
 
 ---
 
