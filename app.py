@@ -370,11 +370,10 @@ def run_plot_metrics(json_path):
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Monochrome(), title="Bird Classification Toolkit") as demo:
-    gr.Markdown("# Bird Species Classification Toolkit")
+with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
+    gr.Markdown("# Multi-Class Classification (Bird Species)")
 
     with gr.Tab("Inference"):
-        gr.Markdown("## Classify a Bird Image")
         with gr.Row():
             with gr.Column(scale=1):
                 inf_model_path = gr.Textbox(label="Model Path", value="./", info="Path to the directory containing model files.")
