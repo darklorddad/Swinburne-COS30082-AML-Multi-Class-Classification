@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import sys
 
 from autotrain.commands import launch_command
 from autotrain.trainers.clm.params import LLMTrainingParams
@@ -72,6 +73,8 @@ def run_training(params, task_id, local=False, wait=False):
     params.save(output_dir=params.project_name)
     cmd = launch_command(params=params)
     cmd = [str(c) for c in cmd]
+    if cmd and cmd[0] == "accelerate" and cmd[1] == "launch":
+        cmd = [sys.executable, "-m", "accelerate.commands.launch"] + cmd[2:]
     env = os.environ.copy()
     process = subprocess.Popen(cmd, env=env)
     if wait:
