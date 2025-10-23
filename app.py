@@ -435,6 +435,53 @@ def show_model_charts(model_dir):
         print(f"Error generating plots for {json_path}: {e}")
         return (None,) * 11 + (gr.update(visible=False), model_dir)
 
+def test_pth_model(base_model_name: str, pth_path, labels_path, input_image: Image.Image) -> dict:
+    if not base_model_name:
+        raise gr.Error("Please provide a base model name (e.g., 'google/vit-base-patch16-224').")
+    if not pth_path:
+        raise gr.Error("Please upload a .pth model file.")
+    if not labels_path:
+        raise gr.Error("Please upload a labels.json file.")
+
+    try:
+        with open(labels_path.name, 'r', encoding='utf-8') as f:
+            id2label = json.load(f)
+        # JSON keys are strings, convert to int for id2label
+        id2label = {int(k): v for k, v in id2label.items()}
+        num_labels = len(id2label)
+        label2id = {v: k for k, v in id2label.items()}
+    except Exception as e:
+        raise gr.Error(f"Error loading or parsing labels.json: {e}")
+
+    try:
+        image_processor = AutoImageProcessor.from_pretrained(base_model_name)
+        model = AutoModelForImageClassification.from_pretrained(
+            base_model_name,
+            num_labels=num_labels,
+            id2label=id2label,
+            label2id=label2id,
+            ignore_mismatched_sizes=True
+        )
+    except Exception as e:
+        raise gr.Error(f"Error loading base model '{base_model_name}'. Original error: {e}")
+
+    try:
+        state_dict = torch.load(pth_path.name, map_location=torch.device('cpu'))
+        model.load_state_dict(state_dict)
+        model.eval()
+    except Exception as e:
+        raise gr.Error(f"Error loading state dict from '{os.path.basename(pth_path.name)}'. Original error: {e}")
+
+    inputs = image_processor(images=input_image, return_tensors="pt")
+    with torch.no_grad():
+        outputs = model(**inputs)
+    
+    probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)[0]
+    top5_prob, top5_indices = torch.topk(probabilities, 5)
+    
+    return {model.config.id2label[i.item()]: p.item() for i, p in zip(top5_indices, top5_prob)}
+
+
 def run_plot_metrics(json_path):
     try:
         figures = util_plot_training_metrics(json_path)
@@ -564,6 +611,25 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_manifest_button = gr.Button("Generate Manifest")
             util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
             util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
+
+    with gr.Tab("Testing"):
+        gr.Markdown("## Test a .pth Model")
+        gr.Markdown("This tab allows you to test a model from a `.pth` state dictionary file. You need to provide the base model architecture it was fine-tuned from, and a `labels.json` file mapping indices to class names.")
+        with gr.Row():
+            with gr.Column(scale=1):
+                test_base_model = gr.Textbox(label="Base Model Name", placeholder="e.g., google/vit-base-patch16-224")
+                test_pth_path = gr.File(label="Upload .pth model file", file_types=[".pth"])
+                test_labels_path = gr.File(label="Upload labels.json file", file_types=[".json"])
+                test_input_image = gr.Image(type="pil", label="Upload image for inference")
+            with gr.Column(scale=1):
+                test_output_label = gr.Label(num_top_classes=5, label="Predictions")
+                test_button = gr.Button("Run Test Inference", variant="primary")
+        
+        test_button.click(
+            fn=test_pth_model,
+            inputs=[test_base_model, test_pth_path, test_labels_path, test_input_image],
+            outputs=test_output_label
+        )
 
 if __name__ == "__main__":
     demo.launch()
