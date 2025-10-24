@@ -371,7 +371,7 @@ def run_organise_dataset(train_zip_file, test_zip_file, train_txt_file, test_txt
         test_zip_path = test_zip_file.name
         train_txt_path = train_txt_file.name
         test_txt_path = test_txt_file.name
-        output_dir_path = output_dir.name
+        output_dir_path = output_dir
 
         def extract_zip_and_get_basedir(zip_path, prefix, log_stream):
             if not os.path.isfile(zip_path) or not zipfile.is_zipfile(zip_path):
@@ -590,7 +590,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             with gr.Row():
                 prep_org_train_txt = gr.File(label="Train Annotations File")
                 prep_org_test_txt = gr.File(label="Test Annotations File")
-            prep_org_output_dir = gr.File(label="Output Directory", file_count="directory")
+            prep_org_output_dir = gr.Textbox(label="Output Directory Path", placeholder="Enter the full path for the output directory")
             prep_org_button = gr.Button("Organise Dataset")
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_train_zip, prep_org_test_zip, prep_org_train_txt, prep_org_test_txt, prep_org_output_dir], outputs=prep_org_log)
