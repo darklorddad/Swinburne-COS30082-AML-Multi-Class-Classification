@@ -1,0 +1,10 @@
+Dataset Balance Analysis
+=========================
+Total classes: 200
+Total images: 6033
+Images per class:
+  - Minimum: 20
+  - Maximum: 39
+  - Average: 30.16
+  - Std Dev: 4.87
+Imbalance Ratio (Max/Min): 1.95:1

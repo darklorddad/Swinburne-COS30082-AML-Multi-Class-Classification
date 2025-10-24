@@ -13,6 +13,7 @@ import subprocess
 import sys
 import webbrowser
 import time
+import requests
 
 from utils import (
     util_create_class_mapping, util_process_dataset, util_normalise_class_names,
@@ -196,12 +197,38 @@ def launch_autotrain_ui():
             stderr=subprocess.DEVNULL,
             startupinfo=startupinfo
         )
-        # Give the server a moment to start
-        time.sleep(3)
-        webbrowser.open(autotrain_url)
-        message = f"Successfully launched AutoTrain UI. It should now be open in your web browser at {autotrain_url}."
-        print(message)
-        return message, gr.update(visible=False), gr.update(visible=True)
+        
+        # Poll for the server to be ready
+        start_time = time.time()
+        timeout = 30  # seconds
+        server_ready = False
+        
+        print("Waiting for AutoTrain UI to start...")
+        
+        while time.time() - start_time < timeout:
+            try:
+                response = requests.get(autotrain_url, timeout=1)
+                if response.status_code == 200:
+                    print("AutoTrain UI is ready.")
+                    server_ready = True
+                    break
+            except requests.ConnectionError:
+                time.sleep(1)
+            except requests.Timeout:
+                pass # Ignore timeouts and continue polling
+        
+        if server_ready:
+            webbrowser.open(autotrain_url)
+            message = f"Successfully launched AutoTrain UI. It should now be open in your web browser at {autotrain_url}."
+            print(message)
+            return message, gr.update(visible=False), gr.update(visible=True)
+        else:
+            # Server failed to start within timeout, so we should stop the zombie process.
+            stop_autotrain_ui()
+            message = f"AutoTrain UI failed to start within {timeout} seconds. The process has been stopped."
+            print(message)
+            return message, gr.update(visible=True), gr.update(visible=False)
+
     except Exception as e:
         message = f"Failed to launch AutoTrain UI: {e}"
         print(message)
