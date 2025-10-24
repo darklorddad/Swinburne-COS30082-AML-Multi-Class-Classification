@@ -99,9 +99,14 @@ The results clearly demonstrate the superior performance of larger, more complex
 
 #### 2.3. Overfitting and Model Generalisation
 
-Overfitting was a primary concern given the dataset's size. The training data confirm that the mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, preventing the model from memorising the training data and losing its ability to generalise.
+Overfitting was a primary concern given the dataset's size. Several strategies were employed to ensure the models generalised well to unseen data:
+-   **Data Augmentation**: Standard augmentations such as random cropping, rotation, flipping, and brightness/contrast adjustments were applied to the training images to create a more diverse dataset.
+-   **Weight Decay**: L2 regularisation (weight decay of `0.01`) was used to penalise large weights and discourage complex models.
+-   **Early Stopping**: Training was configured to halt if the validation loss did not improve for 5 consecutive epochs, preventing the model from continuing to train once it started to overfit.
 
-This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976` a very small gap that indicates effective generalisation. The early stopping mechanism successfully captured the models at their point of optimal performance, preventing them from overfitting to the training data.
+The training logs confirm that these mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, capturing the model at its point of optimal generalisation.
+
+This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976`—a very small gap that indicates effective generalisation. Given the strong performance and good generalisation achieved with these methods, more advanced techniques like Mixup or CutMix were deemed unnecessary for this project.
 
 #### 2.4. Justification for the Best Model
 
