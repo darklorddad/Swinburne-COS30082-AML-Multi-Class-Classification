@@ -19,7 +19,7 @@ The project utilises the **Caltech-UCSD Birds 200 (CUB-200) dataset**, which con
 An initial analysis of the dataset revealed a slight class imbalance, with the number of images per class ranging from 20 to 39. The imbalance ratio (max/min) was calculated to be 1.95:1. While not extreme, this imbalance was noted and its potential impact was considered during evaluation by using macro-averaged metrics that treat each class equally.
 
 The pre-processing pipeline was automated and consisted of several key steps:
-1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a single directory with a standard image folder structure (`<class_name>/<image_file>`). This structure is compatible with many modern training frameworks, including Hugging Face's `autotrain`.
+1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a single directory with a standard image folder structure (`<class_name>/<image_file>`) for compatibility with the Hugging Face `autotrain` framework.
 2.  **Name Normalisation**: Class directory names and image filenames were converted to lowercase. This standardises the naming convention, preventing potential case-related errors and ensuring compatibility with various tools and libraries.
 3.  **Data Splitting**: The organised dataset was split into `train` and `validation` sets. A 20% validation split was used, ensuring that each class had a minimum of 5 images in both splits to allow for robust validation. This step is crucial for monitoring the model's generalisation performance during training.
 
