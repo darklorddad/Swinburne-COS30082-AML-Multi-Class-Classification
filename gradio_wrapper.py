@@ -9,6 +9,8 @@ import io
 import zipfile
 import tempfile
 import matplotlib.pyplot as plt
+import subprocess
+import sys
 
 from utils import (
     util_create_class_mapping, util_process_dataset, util_normalise_class_names,
@@ -170,6 +172,19 @@ def save_balance_analysis(summary, fig, output_basename):
 
 def run_count_classes(target_dir, save_to_manifest, manifest_path):
     return run_with_log_capture(util_count_classes, target_dir, save_to_manifest, manifest_path)
+
+def launch_autotrain_ui():
+    """Launches the AutoTrain Gradio UI in a separate process."""
+    command = [sys.executable, "launch_autotrain.py"]
+    try:
+        subprocess.Popen(command)
+        message = "Successfully launched AutoTrain UI. It should be available at http://localhost:7861 shortly."
+        print(message)
+        return message
+    except Exception as e:
+        message = f"Failed to launch AutoTrain UI: {e}"
+        print(message)
+        return message
 
 def show_model_charts(model_dir):
     """Finds trainer_state.json, returns metric plots, and the model_dir for sync."""

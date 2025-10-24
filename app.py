@@ -3,7 +3,8 @@ from gradio_wrapper import (
     classify_bird, run_organise_dataset, run_normalise_class_names,
     run_normalise_image_names, run_split_dataset, run_generate_manifest,
     run_check_balance, save_balance_analysis, run_count_classes,
-    show_model_charts, get_model_choices, update_model_choices
+    show_model_charts, get_model_choices, update_model_choices,
+    launch_autotrain_ui
 )
 
 # #############################################################################
@@ -39,6 +40,16 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
                 inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
+
+    with gr.Tab("Training"):
+        gr.Markdown("## Launch AutoTrain UI\n\nClick the button below to launch the AutoTrain Advanced UI for training new models. It will open in a new process and be available at `http://localhost:7861`.")
+        train_launch_button = gr.Button("Launch AutoTrain UI")
+        train_launch_log = gr.Textbox(label="Status", interactive=False)
+        train_launch_button.click(
+            fn=launch_autotrain_ui,
+            inputs=[],
+            outputs=[train_launch_log]
+        )
 
     with gr.Tab("Training Metrics"):
         metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
