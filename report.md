@@ -10,7 +10,7 @@
 
 ### 1. Methodology
 
-This section outlines the systematic approach taken to address the multi-class bird species classification problem using the Caltech-UCSD Birds 200 (CUB-200) dataset. The methodology encompasses data preparation, model selection, training strategy, and techniques for mitigating overfitting.
+This section outlines the systematic approach taken to address the multi-class bird species classification problem using the Caltech-UCSD Birds 200 (CUB-200) dataset. The methodology encompasses data preparation, model selection, training strategy and techniques for mitigating overfitting.
 
 #### 1.1. Dataset and Pre-processing
 
@@ -81,7 +81,7 @@ The models were evaluated on the validation set using the mandatory metrics of T
 
 The results clearly demonstrate the superior performance of larger, more complex models pre-trained on extensive datasets.
 
--   **Best Performing Model**: The **`SwinV2-Large-89`** model achieved the highest Top-1 Accuracy of **89.18%**. Its leading performance is also reflected in its F1, Precision, and Recall scores, and it attained the lowest validation loss. This is attributable to its larger architecture (`Large` vs. `Tiny` or `Base`) and its pre-training on the comprehensive ImageNet-22K dataset, which provides a highly robust feature foundation for transfer learning.
+-   **Best Performing Model**: The **`SwinV2-Large-89`** model achieved the highest Top-1 Accuracy of **89.18%**. Its leading performance is also reflected in its F1, Precision, and Recall scores and it attained the lowest validation loss. This is attributable to its larger architecture (`Large` vs. `Tiny` or `Base`) and its pre-training on the comprehensive ImageNet-22K dataset, which provides a highly robust feature foundation for transfer learning.
 
 -   **Close Contenders**: The generic `Swin-Transformer-88` model was a surprisingly strong performer, achieving 88.85% accuracy, nearly matching the `SwinV2-Large` model. This highlights the power of the Swin Transformer architecture itself. The `ConvNeXt-V2-Tiny-86` model also performed admirably, securing the third-highest accuracy at 86.72%, demonstrating the strength of modern convolutional architectures.
 
