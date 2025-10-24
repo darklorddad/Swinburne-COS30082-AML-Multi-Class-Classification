@@ -596,13 +596,13 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_train_zip, prep_org_test_zip, prep_org_train_txt, prep_org_test_txt, prep_org_output_dir], outputs=prep_org_log)
         with gr.Accordion("Normalise Class Directory Names", open=False):
             gr.Markdown("Renames all class subdirectories within a target directory to be lowercase. This helps ensure consistency, which is important for many training frameworks.")
-            prep_norm_class_dir = gr.Textbox(label="Target Directory Path", placeholder="Enter the full path to the directory containing class subdirectories")
+            prep_norm_class_dir = gr.Textbox(label="Target Directory Name", value="processed_dataset", placeholder="Enter the name of the directory containing class subdirectories")
             prep_norm_class_button = gr.Button("Normalise Class Names")
             prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
         with gr.Accordion("Normalise Image Filenames", open=False):
             gr.Markdown("Processes image filenames within a directory. It can convert all filenames to lowercase and/or standardise them into a `class_name_xxxx.ext` format. This is useful for cleaning up dataset naming conventions.")
-            prep_norm_img_dir = gr.Textbox(label="Target Directory Path", placeholder="Enter the full path to the directory to process")
+            prep_norm_img_dir = gr.Textbox(label="Target Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to process")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
             prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)")
             prep_norm_img_button = gr.Button("Process Image Names")
