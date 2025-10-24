@@ -89,7 +89,7 @@ The results clearly demonstrate the superior performance of larger, more complex
 
 #### 2.3. Overfitting and Model Generalisation
 
-Overfitting was a primary concern given the dataset's size. The training logs confirm that our mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, preventing the model from memorising the training data and losing its ability to generalise.
+Overfitting was a primary concern given the dataset's size. The training data confirm that the mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, preventing the model from memorising the training data and losing its ability to generalise.
 
 A visual analysis of the training and validation loss curves for the top models would typically show the training loss continuing to decrease while the validation loss plateaus or begins to increase. The early stopping mechanism intervenes at this plateau, capturing the model at its point of optimal generalisation. The low final validation loss of the top models, especially `SwinV2-Large-89` (0.3713), indicates that they generalised well to unseen data.
 
