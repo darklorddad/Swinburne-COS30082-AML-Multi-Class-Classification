@@ -156,42 +156,64 @@ def util_standardise_filenames(target_dir, to_lowercase, log_capture):
 
 # --- From autotrain_dataset_splitter.py ---
 def util_split_image_dataset(source_dir, output_dir, min_images_per_split, log_capture):
-    train_dir, validation_dir = f"{output_dir}_train", f"{output_dir}_validation"
-    if os.path.exists(train_dir): shutil.rmtree(train_dir)
-    if os.path.exists(validation_dir): shutil.rmtree(validation_dir)
-    class_dirs = [r for r, d, f in os.walk(source_dir) if not d and f]
-    image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"}
-    required_total = min_images_per_split * 2
-    class_image_data = {cd: [f for f in os.listdir(cd) if os.path.splitext(f)[1].lower() in image_extensions] for cd in class_dirs}
-    valid_class_count = sum(1 for images in class_image_data.values() if len(images) >= required_total)
-    if valid_class_count < 2:
-        print(f"Error: Dataset splitting requires at least 2 classes with >= {required_total} images each. Found {valid_class_count} valid classes.", file=log_capture)
-        return
-    manifest = {"included_classes": {}, "skipped_classes": {}}
-    processed_class_names = set()
-    for class_dir, images in class_image_data.items():
-        base_class_name = os.path.basename(class_dir)
-        class_name, counter = base_class_name, 1
-        while class_name in processed_class_names:
-            class_name = f"{base_class_name}_{counter}"; counter += 1
-        processed_class_names.add(class_name)
-        if len(images) < required_total:
-            manifest["skipped_classes"][class_name] = {"count": len(images), "reason": f"Not enough images ({len(images)}), required {required_total}."}
-            continue
-        random.shuffle(images)
-        num_val_ratio = round(len(images) * 0.2)
-        num_train_ratio = len(images) - num_val_ratio
-        num_validation = num_val_ratio if num_val_ratio >= min_images_per_split and num_train_ratio >= min_images_per_split else min_images_per_split
-        validation_images, train_images = images[:num_validation], images[num_validation:]
-        manifest["included_classes"][class_name] = {"train": len(train_images), "validation": len(validation_images)}
-        for split_dir, split_images in [(train_dir, train_images), (validation_dir, validation_images)]:
-            split_class_dir = os.path.join(split_dir, class_name)
-            os.makedirs(split_class_dir, exist_ok=True)
-            for image in split_images:
-                shutil.copy(os.path.join(class_dir, image), os.path.join(split_class_dir, image))
-    manifest_path = f"{output_dir}_manifest.json"
-    with open(manifest_path, "w") as f: json.dump(manifest, f, indent=4)
-    print(f"Dataset split complete. Manifest: {manifest_path}", file=log_capture)
+    main_output_path = os.path.join(os.getcwd(), output_dir)
+    os.makedirs(main_output_path, exist_ok=True)
+    print(f"Created output directory: {main_output_path}", file=log_capture)
+
+    try:
+        with tempfile.TemporaryDirectory(prefix="autotrain_split_train_") as train_dir, \
+             tempfile.TemporaryDirectory(prefix="autotrain_split_val_") as validation_dir:
+
+            class_dirs = [r for r, d, f in os.walk(source_dir) if not d and f]
+            image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"}
+            required_total = min_images_per_split * 2
+            class_image_data = {cd: [f for f in os.listdir(cd) if os.path.splitext(f)[1].lower() in image_extensions] for cd in class_dirs}
+            valid_class_count = sum(1 for images in class_image_data.values() if len(images) >= required_total)
+            if valid_class_count < 2:
+                print(f"Error: Dataset splitting requires at least 2 classes with >= {required_total} images each. Found {valid_class_count} valid classes.", file=log_capture)
+                return
+
+            manifest = {"included_classes": {}, "skipped_classes": {}}
+            processed_class_names = set()
+            for class_dir, images in class_image_data.items():
+                base_class_name = os.path.basename(class_dir)
+                class_name, counter = base_class_name, 1
+                while class_name in processed_class_names:
+                    class_name = f"{base_class_name}_{counter}"; counter += 1
+                processed_class_names.add(class_name)
+                if len(images) < required_total:
+                    manifest["skipped_classes"][class_name] = {"count": len(images), "reason": f"Not enough images ({len(images)}), required {required_total}."}
+                    continue
+                random.shuffle(images)
+                num_val_ratio = round(len(images) * 0.2)
+                num_train_ratio = len(images) - num_val_ratio
+                num_validation = num_val_ratio if num_val_ratio >= min_images_per_split and num_train_ratio >= min_images_per_split else min_images_per_split
+                validation_images, train_images = images[:num_validation], images[num_validation:]
+                manifest["included_classes"][class_name] = {"train": len(train_images), "validation": len(validation_images)}
+                for split_dir, split_images in [(train_dir, train_images), (validation_dir, validation_images)]:
+                    split_class_dir = os.path.join(split_dir, class_name)
+                    os.makedirs(split_class_dir, exist_ok=True)
+                    for image in split_images:
+                        shutil.copy(os.path.join(class_dir, image), os.path.join(split_class_dir, image))
+
+            manifest_filename = f"{output_dir}-manifest.json"
+            manifest_path = os.path.join(main_output_path, manifest_filename)
+            with open(manifest_path, "w") as f: json.dump(manifest, f, indent=4)
+            print(f"Manifest saved to: {manifest_path}", file=log_capture)
+
+            train_zip_filename = f"{output_dir}-train"
+            train_zip_path = os.path.join(main_output_path, train_zip_filename)
+            shutil.make_archive(train_zip_path, 'zip', train_dir)
+            print(f"Training data zip created: {train_zip_path}.zip", file=log_capture)
+
+            validation_zip_filename = f"{output_dir}-validation"
+            validation_zip_path = os.path.join(main_output_path, validation_zip_filename)
+            shutil.make_archive(validation_zip_path, 'zip', validation_dir)
+            print(f"Validation data zip created: {validation_zip_path}.zip", file=log_capture)
+
+        print(f"\nDataset splitting and packaging complete. Files are in '{main_output_path}'.", file=log_capture)
+    except Exception as e:
+        print(f"An error occurred during dataset splitting: {e}", file=log_capture)
 
 # --- From directory_manifest.py ---
 def util_generate_manifest(directory, manifest_path, log_capture):
@@ -586,7 +608,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         )
     with gr.Tab("Data Preparation"):
         with gr.Accordion("Organise Raw Dataset", open=False):
-            gr.Markdown("Organises a raw dataset from separate train/test zip files and annotation files into a structured output directory (created in the project's root). This is useful for datasets where training and testing images are provided in separate archives.")
             with gr.Row():
                 prep_org_train_zip = gr.File(label="Train Images Zip File")
                 prep_org_test_zip = gr.File(label="Test Images Zip File")
@@ -598,13 +619,11 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_train_zip, prep_org_test_zip, prep_org_train_txt, prep_org_test_txt, prep_org_output_dir], outputs=prep_org_log)
         with gr.Accordion("Normalise Class Directory Names", open=False):
-            gr.Markdown("Renames all class subdirectories within a target directory to be lowercase. This helps ensure consistency, which is important for many training frameworks.")
             prep_norm_class_dir = gr.Textbox(label="Target Directory Name", value="processed_dataset", placeholder="Enter the name of the directory containing class subdirectories")
             prep_norm_class_button = gr.Button("Normalise Class Names")
             prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
         with gr.Accordion("Normalise Image Filenames", open=False):
-            gr.Markdown("Processes image filenames within a directory. It can convert all filenames to lowercase and/or standardise them into a `class_name_xxxx.ext` format. This is useful for cleaning up dataset naming conventions.")
             prep_norm_img_dir = gr.Textbox(label="Target Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to process")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
             prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)", value=True)
@@ -612,7 +631,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
         with gr.Accordion("Split Dataset for AutoTrain", open=False):
-            gr.Markdown("Splits a structured dataset into `training` and `validation` sets, suitable for use with tools like AutoTrain. It ensures that each class has a minimum number of images in both splits and creates a manifest file detailing the results.")
             prep_split_source = gr.Textbox(label="Source Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to split")
             prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'")
             prep_split_min = gr.Number(label="Min Images Per Split", value=5)
