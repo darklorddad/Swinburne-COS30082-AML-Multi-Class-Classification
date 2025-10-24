@@ -641,14 +641,14 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Analysis & Utilities"):
         with gr.Accordion("Check Dataset Balance", open=False):
             gr.Markdown("Analyses a dataset manifest file to check for class imbalance. It provides a summary of image counts per class and generates a bar chart to visualise the distribution.")
-            analysis_balance_path = gr.File(label="Path to Manifest File")
+            analysis_balance_path = gr.Textbox(label="Path to Manifest File", placeholder="e.g., 'autotrain_dataset/Dataset-manifest.json'")
             analysis_balance_button = gr.Button("Analyse Balance")
             analysis_balance_log = gr.Textbox(label="Summary", interactive=False, lines=10)
             analysis_balance_plot = gr.Plot(label="Class Distribution")
             analysis_balance_button.click(run_check_balance, inputs=[analysis_balance_path], outputs=[analysis_balance_log, analysis_balance_plot])
         with gr.Accordion("Count Classes in Directory", open=False):
             gr.Markdown("Counts the number of subdirectories (classes) and the number of files (items) within each class in a given directory. It can optionally save this information to a markdown manifest file.")
-            util_count_dir = gr.File(label="Dataset Directory", file_count="directory")
+            util_count_dir = gr.Textbox(label="Dataset Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to count")
             util_count_save = gr.Checkbox(label="Save to manifest file")
             util_count_path = gr.Textbox(label="Manifest File Path", value="class_counts.md")
             util_count_button = gr.Button("Count Classes")
@@ -656,7 +656,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
             gr.Markdown("Creates a manifest file listing all files within a specified directory and its subdirectories. It's useful for getting an overview of a project's structure or for creating file lists for other processes.")
-            util_manifest_dir = gr.File(label="Target Directory", file_count="directory")
+            util_manifest_dir = gr.Textbox(label="Target Directory Name", value=".", placeholder="Enter the name of the directory to scan")
             util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md")
             util_manifest_button = gr.Button("Generate Manifest")
             util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
