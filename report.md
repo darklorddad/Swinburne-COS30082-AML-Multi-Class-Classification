@@ -20,7 +20,7 @@ An initial analysis of the dataset revealed a slight class imbalance, with the n
 
 The pre-processing pipeline was automated and consisted of several key steps:
 1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a standard image folder structure (`<class_name>/<image_file>`). This format is required by many modern training frameworks, including Hugging Face's `autotrain`.
-2.  **Name Normalisation**: Class directory names and image filenames were converted to lowercase to ensure consistency across different operating systems and to prevent case-related errors.
+2.  **Name Normalisation**: Class directory names and image filenames were converted to lowercase. This standardises the naming convention, preventing potential case-related errors and ensuring compatibility with various tools and libraries.
 3.  **Data Splitting**: The organised dataset was further split into `train` and `validation` sets. A 20% validation split was used, ensuring that each class had a minimum of 5 images in both splits to allow for robust validation. This step is crucial for monitoring the model's generalisation performance during training.
 
 #### 1.2. Model Architectures and Transfer Learning
