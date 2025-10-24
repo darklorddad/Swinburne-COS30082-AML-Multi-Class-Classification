@@ -67,13 +67,13 @@ The models were evaluated on the validation set using the mandatory metrics of T
 
 | Model | Base Architecture | Top-1 Accuracy | F1 (Macro) | Precision (Macro) | Recall (Macro) | Validation Loss |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **SwinV2-Large-89** | SwinV2-Large | **0.8918** | **0.8875** | **0.9082** | **0.8886** | **0.3713** |
-| **Swin-Transformer-88** | Swin-Transformer | 0.8885 | 0.8861 | 0.9023 | 0.8880 | 0.3976 |
-| **ConvNeXt-V2-Tiny-86**| ConvNeXt-V2-Tiny | 0.8672 | 0.8615 | 0.8762 | 0.8645 | 0.4875 |
-| **SwinV2-Tiny-83** | SwinV2-Tiny | 0.8377 | 0.8313 | 0.8636 | 0.8356 | 0.5219 |
-| **Focalnet-Base-82** | FocalNet-Base | 0.8262 | 0.8157 | 0.8477 | 0.8219 | 0.6603 |
-| **Swin-Tiny-Eurosat-80**| Swin-Tiny (EuroSAT) | 0.8000 | 0.7928 | 0.8271 | 0.7960 | 0.7601 |
-| **Swin-Tiny-78** | Swin-Tiny | 0.7844 | 0.7758 | 0.8028 | 0.7803 | 0.7969 |
+| **SwinV2-Large-89** | `microsoft/swinv2-large-patch4-window12-192-22k` | **0.8918** | **0.8875** | **0.9082** | **0.8886** | **0.3713** |
+| **Swin-Transformer-88** | `XinWenMonash/swin_transformer` | 0.8885 | 0.8861 | 0.9023 | 0.8880 | 0.3976 |
+| **ConvNeXt-V2-Tiny-86**| `facebook/convnextv2-tiny-22k-224` | 0.8672 | 0.8615 | 0.8762 | 0.8645 | 0.4875 |
+| **SwinV2-Tiny-83** | `microsoft/swinv2-tiny-patch4-window16-256` | 0.8377 | 0.8313 | 0.8636 | 0.8356 | 0.5219 |
+| **Focalnet-Base-82** | `microsoft/focalnet-base` | 0.8262 | 0.8157 | 0.8477 | 0.8219 | 0.6603 |
+| **Swin-Tiny-Eurosat-80**| `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | 0.8000 | 0.7928 | 0.8271 | 0.7960 | 0.7601 |
+| **Swin-Tiny-78** | `microsoft/swin-tiny-patch4-window7-224` | 0.7844 | 0.7758 | 0.8028 | 0.7803 | 0.7969 |
 
 *Metrics are reported on the validation set. Top-1 Accuracy is the primary evaluation metric. Macro-averaged Recall is equivalent to the Average Accuracy Per Class.*
 
