@@ -4,7 +4,7 @@
 **ID**: 102777801
 
 **YouTube Presentation Link**: [Placeholder YouTube Link]
-**Hugging Face Application Link**: [Placeholder Hugging Face Link]
+**Hugging Face Application Link**: [Swinburne-COS30082-AML-Multi-Class-Classification-Bird-Species](https://huggingface.co/spaces/darklorddad/Swinburne-COS30082-AML-Multi-Class-Classification-Bird-Species)
 
 ---
 
@@ -106,9 +106,9 @@ Overfitting was a primary concern given the dataset's size. A multi-faceted appr
 -   **Learning Rate Scheduling**: A linear or cosine scheduler with a warmup period helped stabilise training.
 -   **Early Stopping**: Training was configured to halt if the validation loss did not improve for 5 consecutive epochs.
 
-The training logs confirm that these mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, capturing the model at its point of optimal generalisation.
+The training data confirms that these mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, capturing the model at its point of optimal generalisation.
 
-This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976`—a very small gap that indicates effective generalisation. Given the strong performance and good generalisation achieved with these methods, more advanced techniques such as self-supervised learning, ensemble methods, Mixup or CutMix were deemed unnecessary for this project.
+This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976`, a very small gap that indicates effective generalisation. Given the strong performance and good generalisation achieved with these methods, more advanced techniques such as self-supervised learning, ensemble methods, Mixup or CutMix were deemed unnecessary for this project.
 
 #### 2.4. Justification for the Best Model
 
