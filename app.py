@@ -583,14 +583,14 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         )
     with gr.Tab("Data Preparation"):
         with gr.Accordion("Organise Raw Dataset", open=False):
-            gr.Markdown("Organises a raw dataset from separate train/test zip files and annotation files into a structured output directory. This is useful for datasets where training and testing images are provided in separate archives.")
+            gr.Markdown("Organises a raw dataset from separate train/test zip files and annotation files into a structured output directory (created in the project's root). This is useful for datasets where training and testing images are provided in separate archives.")
             with gr.Row():
                 prep_org_train_zip = gr.File(label="Train Images Zip File")
                 prep_org_test_zip = gr.File(label="Test Images Zip File")
             with gr.Row():
                 prep_org_train_txt = gr.File(label="Train Annotations File")
                 prep_org_test_txt = gr.File(label="Test Annotations File")
-            prep_org_output_dir = gr.Textbox(label="Output Directory Path", placeholder="Enter the full path for the output directory")
+            prep_org_output_dir = gr.Textbox(label="Output Directory Name", value="processed_dataset", placeholder="A name for the output directory")
             prep_org_button = gr.Button("Organise Dataset")
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_train_zip, prep_org_test_zip, prep_org_train_txt, prep_org_test_txt, prep_org_output_dir], outputs=prep_org_log)
