@@ -250,15 +250,13 @@ def util_generate_manifest(directory, save_manifest, manifest_path, log_capture)
 def util_get_class_from_line(line: str):
     return line.strip().lstrip('- ').split('/')[0] if '/' in line else None
 
-def util_analyse_balance(manifest_path, log_capture):
+def util_analyse_balance(manifest_path):
     if not os.path.exists(manifest_path):
-        print(f"Error: Manifest file not found at '{manifest_path}'", file=log_capture)
-        return None
+        raise FileNotFoundError(f"Error: Manifest file not found at '{manifest_path}'")
     with open(manifest_path, 'r', encoding='utf-8') as f: lines = f.readlines()
     class_counts = Counter(c for line in lines if (c := util_get_class_from_line(line)))
     if not class_counts:
-        print("No classes found in the manifest file.", file=log_capture)
-        return None
+        return "No classes found in the manifest file.", None
     counts = list(class_counts.values())
     imbalance_ratio = max(counts) / min(counts)
     summary = (
@@ -273,14 +271,13 @@ def util_analyse_balance(manifest_path, log_capture):
         f"  - Std Dev: {np.std(counts):.2f}\n"
         f"Imbalance Ratio (Max/Min): {imbalance_ratio:.2f}:1"
     )
-    print(summary, file=log_capture)
     sorted_classes = sorted(class_counts.keys())
     sorted_counts = [class_counts[c] for c in sorted_classes]
     fig, ax = plt.subplots(figsize=(20, 10))
     ax.bar(sorted_classes, sorted_counts)
     ax.set_xlabel('Class'); ax.set_ylabel('Number of Images'); ax.set_title('Image Distribution Across Classes')
     plt.xticks(rotation=90, fontsize='small'); plt.tight_layout()
-    return fig
+    return summary, fig
 
 # --- From count_classes.py ---
 def util_count_classes(target_dir, save_to_manifest, manifest_path, log_capture):
@@ -493,10 +490,36 @@ def run_generate_manifest(directory, save_manifest, manifest_path):
     return log_capture.getvalue()
 
 def run_check_balance(manifest_path):
+    try:
+        summary, fig = util_analyse_balance(manifest_path)
+        if fig is None:
+            return summary, None, None, None, gr.update(visible=False)
+        return summary, fig, summary, fig, gr.update(visible=True)
+    except Exception as e:
+        return str(e), None, None, None, gr.update(visible=False)
+
+def save_balance_analysis(summary, fig, output_basename):
+    if not summary or fig is None or not output_basename:
+        return "Nothing to save or invalid basename."
+    
     log_capture = io.StringIO()
     with redirect_stdout(log_capture):
-        fig = util_analyse_balance(manifest_path, log_capture)
-    return log_capture.getvalue(), fig
+        try:
+            summary_path = f"{output_basename}_summary.txt"
+            plot_path = f"{output_basename}_plot.png"
+            
+            with open(summary_path, 'w', encoding='utf-8') as f:
+                f.write(summary)
+            print(f"Summary saved to {summary_path}", file=log_capture)
+            
+            fig.savefig(plot_path)
+            plt.close(fig) # Close the figure to free up memory
+            print(f"Plot saved to {plot_path}", file=log_capture)
+            
+        except Exception as e:
+            print(f"Error saving analysis: {e}", file=log_capture)
+            
+    return log_capture.getvalue()
 
 def run_count_classes(target_dir, save_to_manifest, manifest_path):
     return run_with_log_capture(util_count_classes, target_dir, save_to_manifest, manifest_path)
@@ -663,9 +686,27 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             gr.Markdown("Analyses a dataset manifest file to check for class imbalance. It provides a summary of image counts per class and generates a bar chart to visualise the distribution.")
             analysis_balance_path = gr.Textbox(label="Path to Manifest File", placeholder="e.g., 'autotrain_dataset/Dataset-manifest.json'")
             analysis_balance_button = gr.Button("Analyse Balance")
-            analysis_balance_log = gr.Textbox(label="Summary", interactive=False, lines=10)
+            analysis_balance_summary = gr.Textbox(label="Summary", interactive=False, lines=10)
             analysis_balance_plot = gr.Plot(label="Class Distribution")
-            analysis_balance_button.click(run_check_balance, inputs=[analysis_balance_path], outputs=[analysis_balance_log, analysis_balance_plot])
+            
+            analysis_summary_state = gr.State()
+            analysis_plot_state = gr.State()
+
+            with gr.Column(visible=False) as analysis_save_container:
+                analysis_save_path = gr.Textbox(label="Save Basename", value="analysis_balance", placeholder="e.g., my_dataset_balance")
+                analysis_save_button = gr.Button("Save Analysis")
+                analysis_save_log = gr.Textbox(label="Save Log", interactive=False, lines=3)
+
+            analysis_balance_button.click(
+                fn=run_check_balance,
+                inputs=[analysis_balance_path],
+                outputs=[analysis_balance_summary, analysis_balance_plot, analysis_summary_state, analysis_plot_state, analysis_save_container]
+            )
+            analysis_save_button.click(
+                fn=save_balance_analysis,
+                inputs=[analysis_summary_state, analysis_plot_state, analysis_save_path],
+                outputs=[analysis_save_log]
+            )
         with gr.Accordion("Count Classes in Directory", open=False):
             gr.Markdown("Counts the number of subdirectories (classes) and the number of files (items) within each class in a given directory. It can optionally save this information to a markdown manifest file.")
             util_count_dir = gr.Textbox(label="Dataset Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to count")
