@@ -328,54 +328,65 @@ def util_plot_training_metrics(json_path):
     fig_loss, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Training vs. Evaluation Loss')
     if 'loss' in train_df: ax.plot(train_df['step'], train_df['loss'], label='Training Loss', marker='o')
     if 'eval_loss' in eval_df: ax.plot(eval_df['step'], eval_df['eval_loss'], label='Evaluation Loss', marker='x')
+    ax.set_xlabel('Step'); ax.set_ylabel('Loss')
     ax.legend(); ax.grid(True); figures['Loss'] = fig_loss
     # Plot Accuracy
     fig_acc, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Accuracy')
     if 'eval_accuracy' in eval_df: ax.plot(eval_df['step'], eval_df['eval_accuracy'], label='Evaluation Accuracy', marker='o', color='g')
+    ax.set_xlabel('Step'); ax.set_ylabel('Accuracy')
     ax.legend(); ax.grid(True); figures['Accuracy'] = fig_acc
     # Plot Learning Rate
     fig_lr, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Learning Rate Schedule')
     if 'learning_rate' in train_df: ax.plot(train_df['step'], train_df['learning_rate'], label='Learning Rate', marker='o', color='r')
+    ax.set_xlabel('Step'); ax.set_ylabel('Learning Rate')
     ax.legend(); ax.grid(True); figures['Learning Rate'] = fig_lr
     # Plot Grad Norm
     fig_gn, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Gradient Norm')
     if 'grad_norm' in train_df: ax.plot(train_df['step'], train_df['grad_norm'], label='Grad Norm', marker='o', color='purple')
+    ax.set_xlabel('Step'); ax.set_ylabel('Gradient Norm')
     ax.legend(); ax.grid(True); figures['Gradient Norm'] = fig_gn
     # Plot F1
     fig_f1, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation F1 Scores')
     if 'eval_f1_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_macro'], label='F1 Macro', marker='o')
     if 'eval_f1_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_micro'], label='F1 Micro', marker='x')
     if 'eval_f1_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_f1_weighted'], label='F1 Weighted', marker='s')
+    ax.set_xlabel('Step'); ax.set_ylabel('F1 Score')
     ax.legend(); ax.grid(True); figures['F1 Scores'] = fig_f1
     # Plot Precision
     fig_prec, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Precision Scores')
     if 'eval_precision_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_macro'], label='Precision Macro', marker='o')
     if 'eval_precision_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_micro'], label='Precision Micro', marker='x')
     if 'eval_precision_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_precision_weighted'], label='Precision Weighted', marker='s')
+    ax.set_xlabel('Step'); ax.set_ylabel('Precision')
     ax.legend(); ax.grid(True); figures['Precision'] = fig_prec
     # Plot Recall
     fig_recall, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Recall Scores')
     if 'eval_recall_macro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_macro'], label='Recall Macro', marker='o')
     if 'eval_recall_micro' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_micro'], label='Recall Micro', marker='x')
     if 'eval_recall_weighted' in eval_df: ax.plot(eval_df['step'], eval_df['eval_recall_weighted'], label='Recall Weighted', marker='s')
+    ax.set_xlabel('Step'); ax.set_ylabel('Recall')
     ax.legend(); ax.grid(True); figures['Recall'] = fig_recall
     # Plot Epoch
     fig_epoch, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Epoch Progression')
     if 'epoch' in df:
         epoch_df = df[['step', 'epoch']].dropna().drop_duplicates('step').sort_values('step')
         ax.plot(epoch_df['step'], epoch_df['epoch'], label='Epoch', marker='.')
+    ax.set_xlabel('Step'); ax.set_ylabel('Epoch')
     ax.legend(); ax.grid(True); figures['Epoch'] = fig_epoch
     # Plot Eval Runtime
     fig_runtime, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Runtime')
     if 'eval_runtime' in eval_df: ax.plot(eval_df['step'], eval_df['eval_runtime'], label='Eval Runtime', marker='o')
+    ax.set_xlabel('Step'); ax.set_ylabel('Runtime (s)')
     ax.legend(); ax.grid(True); figures['Eval Runtime'] = fig_runtime
     # Plot Eval Samples Per Second
     fig_sps, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Samples Per Second')
     if 'eval_samples_per_second' in eval_df: ax.plot(eval_df['step'], eval_df['eval_samples_per_second'], label='Eval Samples/sec', marker='o')
+    ax.set_xlabel('Step'); ax.set_ylabel('Samples / Second')
     ax.legend(); ax.grid(True); figures['Eval Samples/sec'] = fig_sps
     # Plot Eval Steps Per Second
     fig_steps_ps, ax = plt.subplots(figsize=(10, 6)); ax.set_title('Evaluation Steps Per Second')
     if 'eval_steps_per_second' in eval_df: ax.plot(eval_df['step'], eval_df['eval_steps_per_second'], label='Eval Steps/sec', marker='o')
+    ax.set_xlabel('Step'); ax.set_ylabel('Steps / Second')
     ax.legend(); ax.grid(True); figures['Eval Steps/sec'] = fig_steps_ps
     return figures
 
