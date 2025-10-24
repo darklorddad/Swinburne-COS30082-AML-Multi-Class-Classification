@@ -21,6 +21,9 @@ from utils import (
     util_plot_training_metrics
 )
 
+AUTOTRAIN_PROCESS = None
+
+
 def classify_bird(model_path: str, input_image: Image.Image) -> dict:
     if not model_path:
         raise gr.Error("Please select a model directory.")
@@ -177,23 +180,26 @@ def run_count_classes(target_dir, save_to_manifest, manifest_path):
 
 def launch_autotrain_ui():
     """Launches the AutoTrain Gradio UI and opens it in a new browser tab."""
+    global AUTOTRAIN_PROCESS
     command = [sys.executable, "launch_autotrain.py"]
     autotrain_url = "http://localhost:7861"
     try:
-        process = subprocess.Popen(command)
+        AUTOTRAIN_PROCESS = subprocess.Popen(command)
         # Give the server a moment to start
         time.sleep(3)
         webbrowser.open(autotrain_url)
         message = f"Successfully launched AutoTrain UI. It should now be open in your web browser at {autotrain_url}."
         print(message)
-        return message, process, gr.update(visible=False), gr.update(visible=True)
+        return message, gr.update(visible=False), gr.update(visible=True)
     except Exception as e:
         message = f"Failed to launch AutoTrain UI: {e}"
         print(message)
-        return message, None, gr.update(visible=True), gr.update(visible=False)
+        return message, gr.update(visible=True), gr.update(visible=False)
 
-def stop_autotrain_ui(process):
+def stop_autotrain_ui():
     """Stops the AutoTrain UI process."""
+    global AUTOTRAIN_PROCESS
+    process = AUTOTRAIN_PROCESS
     if process and process.poll() is None:
         try:
             process.terminate()
@@ -205,14 +211,16 @@ def stop_autotrain_ui(process):
         except Exception as e:
             message = f"Error stopping AutoTrain UI: {e}"
             print(message)
-            return message, process, gr.update(visible=False), gr.update(visible=True)
+            return message, gr.update(visible=False), gr.update(visible=True)
         
         print(message)
-        return message, None, gr.update(visible=True), gr.update(visible=False)
+        AUTOTRAIN_PROCESS = None
+        return message, gr.update(visible=True), gr.update(visible=False)
     else:
         message = "AutoTrain UI process is not running or was already stopped."
         print(message)
-        return message, None, gr.update(visible=True), gr.update(visible=False)
+        AUTOTRAIN_PROCESS = None
+        return message, gr.update(visible=True), gr.update(visible=False)
 
 def show_model_charts(model_dir):
     """Finds trainer_state.json, returns metric plots, and the model_dir for sync."""
