@@ -85,7 +85,7 @@ The models were evaluated on the validation set using the mandatory metrics of T
 | **Swin-Tiny-Eurosat-80**| `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | 0.8000 | 0.7928 | 0.8271 | 0.7960 | 0.7601 |
 | **Swin-Tiny-78** | `microsoft/swin-tiny-patch4-window7-224` | 0.7844 | 0.7758 | 0.8028 | 0.7803 | 0.7969 |
 
-*Metrics are reported on the validation set. Top-1 Accuracy is the primary evaluation metric. Macro-averaged Recall is equivalent to the Average Accuracy Per Class.*
+*Metrics are reported on the validation set. Top-1 Accuracy is the primary evaluation metric. Macro-averaged Recall is used for Average Accuracy Per Class, as it calculates the average of the per-class recall scores, effectively representing the mean accuracy for each class.*
 
 #### 2.2. Analysis and Discussion
 
