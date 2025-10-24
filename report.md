@@ -16,7 +16,7 @@ This section outlines the systematic approach taken to address the multi-class b
 
 The project utilises the **Caltech-UCSD Birds 200 (CUB-200) dataset**, which contains 6,033 images of 200 bird species. The provided data was split into a training set of 4,829 images and a test set.
 
-An initial analysis of the dataset revealed a slight class imbalance, with the number of images per class ranging from 20 to 39. The imbalance ratio (max/min) was calculated to be 1.95:1. While not extreme, this imbalance was noted, and its potential impact was considered during evaluation by using macro-averaged metrics that treat each class equally.
+An initial analysis of the dataset revealed a slight class imbalance, with the number of images per class ranging from 20 to 39. The imbalance ratio (max/min) was calculated to be 1.95:1. While not extreme, this imbalance was noted and its potential impact was considered during evaluation by using macro-averaged metrics that treat each class equally.
 
 The pre-processing pipeline was automated and consisted of several key steps:
 1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a single directory with a standard image folder structure (`<class_name>/<image_file>`). This format is required by many modern training frameworks, including Hugging Face's `autotrain`.
