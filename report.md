@@ -1,7 +1,7 @@
 # COS30082 Assignment: Bird Species Classification
 
-**Name**: [Your Name]
-**ID**: [Your Student ID]
+**Name**: Daniel Tiong
+**ID**: 102777801
 
 **YouTube Presentation Link**: [Placeholder YouTube Link]
 **Hugging Face Application Link**: [Placeholder Hugging Face Link]
@@ -85,7 +85,7 @@ The results clearly demonstrate the superior performance of larger, more complex
 
 -   **Close Contenders**: The generic `Swin-Transformer-88` model was a surprisingly strong performer, achieving 88.85% accuracy, nearly matching the `SwinV2-Large` model. This highlights the power of the Swin Transformer architecture itself. The `ConvNeXt-V2-Tiny-86` model also performed admirably, securing the third-highest accuracy at 86.72%, demonstrating the strength of modern convolutional architectures.
 
--   **Impact of Model Size and Pre-training**: A clear trend emerges where larger models (`SwinV2-Large`) outperform their smaller counterparts (`SwinV2-Tiny`). Furthermore, the domain of pre-training data is significant. The `Swin-Tiny-Eurosat-80` model, pre-trained on satellite imagery, performed worse than models pre-trained on general-purpose datasets like ImageNet, confirming that pre-training on a domain closer to the target task (general object recognition vs. satellite images) is more beneficial.
+-   **Impact of Model Size and Pre-training**: A clear trend emerges where larger models (`SwinV2-Large`) outperform their smaller counterparts (`SwinV2-Tiny`). The impact of the pre-training domain is also notable. Interestingly, the `Swin-Tiny-Eurosat-80` model, which was fine-tuned on satellite imagery, achieved a slightly higher accuracy (80.00%) than its base counterpart, `Swin-Tiny-78` (78.44%). This suggests that even out-of-domain fine-tuning can sometimes provide a better initialisation than a more general pre-trained model, although both were ultimately outperformed by models pre-trained on larger datasets like ImageNet-21k or ImageNet-22k.
 
 #### 2.3. Overfitting and Model Generalisation
 
