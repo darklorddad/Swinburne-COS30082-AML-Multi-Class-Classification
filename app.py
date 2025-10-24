@@ -676,7 +676,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
             gr.Markdown("Creates a manifest file listing all files within a specified directory and its subdirectories. It's useful for getting an overview of a project's structure or for creating file lists for other processes.")
-            util_manifest_dir = gr.File(label="Target Directory", file_count="directory")
+            util_manifest_dir = gr.Textbox(label="Target Directory Name", value=".", placeholder="Enter the name of the directory to scan")
             util_manifest_save = gr.Checkbox(label="Save manifest to file", value=False)
             util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md", visible=False)
             util_manifest_button = gr.Button("Generate Manifest")
