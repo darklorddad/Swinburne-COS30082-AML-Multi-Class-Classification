@@ -471,9 +471,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                with gr.Row():
-                    inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None, scale=4)
-                    inf_refresh_button = gr.Button("Refresh", scale=1)
+                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
             with gr.Column(scale=1):
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
@@ -481,9 +479,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
     with gr.Tab("Training Metrics"):
-        with gr.Row():
-            metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None, scale=4)
-            metrics_refresh_button = gr.Button("Refresh", scale=1)
+        metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
         with gr.Column(visible=False) as inf_plots_container:
             with gr.Row():
                 inf_plot_loss = gr.Plot(label="Loss")
@@ -518,9 +514,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             inputs=[metrics_model_path],
             outputs=inf_plots + [inf_plots_container, inf_model_path]
         )
-        metrics_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
-        inf_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
-
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
         with gr.Accordion("1. Organise Raw Dataset", open=False):
@@ -577,6 +570,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
             util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
 
+    demo.load(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path], every=5)
 
 if __name__ == "__main__":
     demo.launch()
