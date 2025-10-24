@@ -99,14 +99,16 @@ The results clearly demonstrate the superior performance of larger, more complex
 
 #### 2.3. Overfitting and Model Generalisation
 
-Overfitting was a primary concern given the dataset's size. Several strategies were employed to ensure the models generalised well to unseen data:
--   **Data Augmentation**: Standard augmentations such as random cropping, rotation, flipping and brightness/contrast adjustments were applied to the training images to create a more diverse dataset.
--   **Weight Decay**: L2 regularisation (weight decay of `0.01`) was used to penalise large weights and discourage complex models.
--   **Early Stopping**: Training was configured to halt if the validation loss did not improve for 5 consecutive epochs, preventing the model from continuing to train once it started to overfit.
+Overfitting was a primary concern given the dataset's size. A multi-faceted approach was taken to ensure the models generalised well to unseen data:
+-   **Architectural Regularisation**: The selected pre-trained models (ViTs and ConvNeXt) inherently include regularisation techniques like **Dropout** and **Layer Normalisation**.
+-   **Data Augmentation**: Standard augmentations such as random cropping, rotation, flipping, and brightness/contrast adjustments were applied to the training images.
+-   **Weight Decay**: L2 regularisation (weight decay of `0.01`) was used to penalise large weights.
+-   **Learning Rate Scheduling**: A linear or cosine scheduler with a warmup period helped stabilise training.
+-   **Early Stopping**: Training was configured to halt if the validation loss did not improve for 5 consecutive epochs.
 
-The training data confirm that these mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, capturing the model at its point of optimal generalisation.
+The training logs confirm that these mitigation strategies were effective. For instance, the training for `Model-Swin-Transformer-88` was halted by the early stopping callback at epoch 25, well before the 100-epoch limit. This occurred because the validation loss ceased to improve, capturing the model at its point of optimal generalisation.
 
-This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976`, a very small gap that indicates effective generalisation. Given the strong performance and good generalisation achieved with these methods, more advanced techniques like Mixup or CutMix were deemed unnecessary for this project.
+This is quantitatively supported by the training data. For the top-performing `SwinV2-Large-89` model, the final validation loss was an excellent **0.3713**. For the `Swin-Transformer-88` model, the final training loss was `0.3711` while the validation loss was `0.3976`—a very small gap that indicates effective generalisation. Given the strong performance and good generalisation achieved with these methods, more advanced techniques such as self-supervised learning, ensemble methods, Mixup or CutMix were deemed unnecessary for this project.
 
 #### 2.4. Justification for the Best Model
 
@@ -125,7 +127,7 @@ While computationally more intensive, the performance gains justify its selectio
 This project successfully demonstrated a systematic approach to fine-tuning various state-of-the-art vision models for the CUB-200 bird species classification task. The `SwinV2-Large-89` model emerged as the top performer, achieving an impressive 89.18% accuracy on the validation set. The results underscore the importance of model scale and the quality of pre-training data in achieving high performance on specialised computer vision tasks.
 
 For future work, several avenues could be explored to further improve performance:
--   **Advanced Data Augmentation**: Implement more sophisticated augmentation techniques like Mixup or CutMix to enhance model robustness.
--   **Hyperparameter Optimisation**: Conduct a more exhaustive hyperparameter search using automated tools like Optuna to find the optimal configuration for the best-performing models.
--   **Addressing Class Imbalance**: Experiment with techniques such as weighted loss functions or oversampling methods (e.g., SMOTE) to mitigate the slight class imbalance in the dataset.
--   **Ensemble Methods**: Combine predictions from the top-performing models to potentially boost accuracy and generalisation.
+-   **Advanced Training Techniques**: While not necessary to achieve the strong results in this project, performance could potentially be pushed further by exploring methods like self-supervised learning on the target dataset before fine-tuning.
+-   **Ensemble Methods**: Combining predictions from the top-performing models (e.g., `SwinV2-Large` and `Swin-Transformer`) could lead to a more robust final model.
+-   **Hyperparameter Optimisation**: Conduct a more exhaustive hyperparameter search using automated tools like Optuna, particularly for the top-performing models.
+-   **Addressing Class Imbalance**: Although the imbalance was slight, experimenting with techniques such as weighted loss functions or oversampling methods (e.g., SMOTE) could yield further gains.
