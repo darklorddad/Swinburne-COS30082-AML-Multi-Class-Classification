@@ -55,6 +55,16 @@ All models were trained using the Hugging Face `autotrain-advanced` tool, which 
 
 The models were trained for a maximum of 100 epochs, but early stopping often terminated the process sooner, saving computational resources and yielding models with better generalisation.
 
+#### 1.4. Web Application and Deployment
+
+To provide an interactive interface for the trained models, a web application was developed using **Gradio**. The application allows users to:
+-   Select any of the fine-tuned models.
+-   Upload an image of a bird and receive the top-5 species predictions with their confidence scores.
+-   Visualise the training metrics (e.g., loss, accuracy, learning rate) for each model via interactive plots.
+-   Access data preparation utilities to organise, normalise and split image datasets.
+
+The application is deployed on Hugging Face Spaces, providing a publicly accessible platform for model inference and analysis.
+
 ---
 
 ### 2. Result and Discussion
@@ -102,3 +112,15 @@ The **`Model-SwinV2-Large-89`** is unequivocally the best model from this study.
 3.  **Architectural Advantage**: As a large-scale Swin Transformer (v2), it benefits from the latest architectural improvements and a vast pre-training regimen, giving it a significant advantage in feature extraction and representation.
 
 While computationally more intensive, the performance gains justify its selection as the final, recommended model for this bird classification task.
+
+---
+
+### 3. Conclusion and Future Work
+
+This project successfully demonstrated a systematic approach to fine-tuning various state-of-the-art vision models for the CUB-200 bird species classification task. The `SwinV2-Large-89` model emerged as the top performer, achieving an impressive 89.18% accuracy on the validation set. The results underscore the importance of model scale and the quality of pre-training data in achieving high performance on specialised computer vision tasks.
+
+For future work, several avenues could be explored to further improve performance:
+-   **Advanced Data Augmentation**: Implement more sophisticated augmentation techniques like Mixup or CutMix to enhance model robustness.
+-   **Hyperparameter Optimisation**: Conduct a more exhaustive hyperparameter search using automated tools like Optuna to find the optimal configuration for the best-performing models.
+-   **Addressing Class Imbalance**: Experiment with techniques such as weighted loss functions or oversampling methods (e.g., SMOTE) to mitigate the slight class imbalance in the dataset.
+-   **Ensemble Methods**: Combine predictions from the top-performing models to potentially boost accuracy and generalisation.
