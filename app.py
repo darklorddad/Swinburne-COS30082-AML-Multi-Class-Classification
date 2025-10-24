@@ -607,7 +607,7 @@ def update_model_choices():
 # GRADIO UI
 # #############################################################################
 
-with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
+with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)", css="footer {display: none !important}") as demo:
     gr.Markdown("# Multi-Class Classification (Bird Species)")
 
     gr.HTML(
