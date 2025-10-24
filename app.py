@@ -92,11 +92,17 @@ def util_normalise_class_names(target_dir, log_capture):
                 print(f"Warning: Cannot rename '{old_name}' to '{new_name}' because a different directory with that name already exists. Skipping.", file=log_capture)
                 continue
             try:
-                # Use shutil.move as it correctly handles case-only renames on Windows
-                shutil.move(old_path, new_path)
+                # Two-stage rename to handle case-insensitivity issues on some filesystems
+                temp_name = old_name + "_temp_rename"
+                temp_path = os.path.join(target_dir, temp_name)
+                if os.path.exists(temp_path):
+                    print(f"Warning: Temporary path '{temp_path}' already exists. Skipping rename for '{old_name}'.", file=log_capture)
+                    continue
+                os.rename(old_path, temp_path)
+                os.rename(temp_path, new_path)
                 print(f"Renamed '{old_name}' to '{new_name}'.", file=log_capture)
-            except Exception as e:
-                print(f"Error renaming '{old_name}' to '{new_name}': {e}", file=log_capture)
+            except OSError as e:
+                print(f"Error renaming '{old_name}': {e}", file=log_capture)
         print("\nNormalisation complete.", file=log_capture)
     except Exception as e:
         print(f"An unexpected error occurred: {e}", file=log_capture)
@@ -601,7 +607,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             gr.Markdown("Processes image filenames within a directory. It can convert all filenames to lowercase and/or standardise them into a `class_name_xxxx.ext` format. This is useful for cleaning up dataset naming conventions.")
             prep_norm_img_dir = gr.Textbox(label="Target Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to process")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
-            prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)")
+            prep_norm_img_std = gr.Checkbox(label="Standardise filenames (e.g., class_0001.jpg)", value=True)
             prep_norm_img_button = gr.Button("Process Image Names")
             prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
