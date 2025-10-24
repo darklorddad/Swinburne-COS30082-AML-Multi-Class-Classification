@@ -468,7 +468,21 @@ def update_model_choices():
 with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
     gr.Markdown("# Multi-Class Classification (Bird Species)")
 
-    gr.HTML('<script>setInterval(() => { const btn = document.getElementById("model_refresh_button"); if (btn) { btn.click(); } }, 5000)</script>', visible=False)
+    gr.HTML(
+        """
+        <script>
+            window.addEventListener('load', () => {
+                setInterval(() => {
+                    const btn = document.getElementById('model_refresh_button');
+                    if (btn) {
+                        btn.click();
+                    }
+                }, 5000);
+            });
+        </script>
+        """,
+        visible=False
+    )
     refresh_button = gr.Button(elem_id="model_refresh_button", visible=False)
 
     with gr.Tab("Inference"):
