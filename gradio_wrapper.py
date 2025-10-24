@@ -180,17 +180,39 @@ def launch_autotrain_ui():
     command = [sys.executable, "launch_autotrain.py"]
     autotrain_url = "http://localhost:7861"
     try:
-        subprocess.Popen(command)
+        process = subprocess.Popen(command)
         # Give the server a moment to start
         time.sleep(3)
         webbrowser.open(autotrain_url)
         message = f"Successfully launched AutoTrain UI. It should now be open in your web browser at {autotrain_url}."
         print(message)
-        return message
+        return message, process, gr.update(visible=False), gr.update(visible=True)
     except Exception as e:
         message = f"Failed to launch AutoTrain UI: {e}"
         print(message)
-        return message
+        return message, None, gr.update(visible=True), gr.update(visible=False)
+
+def stop_autotrain_ui(process):
+    """Stops the AutoTrain UI process."""
+    if process and process.poll() is None:
+        try:
+            process.terminate()
+            process.wait(timeout=5)
+            message = "AutoTrain UI process has been stopped."
+        except subprocess.TimeoutExpired:
+            process.kill()
+            message = "AutoTrain UI process did not stop gracefully and was killed."
+        except Exception as e:
+            message = f"Error stopping AutoTrain UI: {e}"
+            print(message)
+            return message, process, gr.update(visible=False), gr.update(visible=True)
+        
+        print(message)
+        return message, None, gr.update(visible=True), gr.update(visible=False)
+    else:
+        message = "AutoTrain UI process is not running or was already stopped."
+        print(message)
+        return message, None, gr.update(visible=True), gr.update(visible=False)
 
 def show_model_charts(model_dir):
     """Finds trainer_state.json, returns metric plots, and the model_dir for sync."""

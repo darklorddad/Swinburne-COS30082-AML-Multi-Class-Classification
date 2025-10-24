@@ -4,7 +4,7 @@ from gradio_wrapper import (
     run_normalise_image_names, run_split_dataset, run_generate_manifest,
     run_check_balance, save_balance_analysis, run_count_classes,
     show_model_charts, get_model_choices, update_model_choices,
-    launch_autotrain_ui
+    launch_autotrain_ui, stop_autotrain_ui
 )
 
 # #############################################################################
@@ -42,12 +42,21 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
     with gr.Tab("Training"):
-        train_launch_button = gr.Button("Launch AutoTrain UI")
+        train_process_state = gr.State()
+        with gr.Row():
+            train_launch_button = gr.Button("Launch AutoTrain UI")
+            train_stop_button = gr.Button("Stop AutoTrain UI", visible=False)
         train_launch_log = gr.Textbox(label="Status", interactive=False)
+        
         train_launch_button.click(
             fn=launch_autotrain_ui,
             inputs=[],
-            outputs=[train_launch_log]
+            outputs=[train_launch_log, train_process_state, train_launch_button, train_stop_button]
+        )
+        train_stop_button.click(
+            fn=stop_autotrain_ui,
+            inputs=[train_process_state],
+            outputs=[train_launch_log, train_process_state, train_launch_button, train_stop_button]
         )
 
     with gr.Tab("Training Metrics"):
