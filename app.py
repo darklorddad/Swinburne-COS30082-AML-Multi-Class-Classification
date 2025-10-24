@@ -13,8 +13,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from contextlib import redirect_stdout
 import io
-import torchvision.models as models
-import torchvision.transforms as T
 
 
 # #############################################################################
@@ -437,66 +435,6 @@ def show_model_charts(model_dir):
         print(f"Error generating plots for {json_path}: {e}")
         return (None,) * 11 + (gr.update(visible=False), model_dir)
 
-def test_pth_model(base_model_name: str, pth_path, labels_path, input_image: Image.Image) -> dict:
-    if not base_model_name:
-        raise gr.Error("Please provide a TorchVision model name (e.g., 'resnet50').")
-    if not pth_path:
-        raise gr.Error("Please upload a .pth model file.")
-    if not labels_path:
-        raise gr.Error("Please upload a labels.json file.")
-
-    try:
-        with open(labels_path.name, 'r', encoding='utf-8') as f:
-            id2label = json.load(f)
-        id2label = {int(k): v for k, v in id2label.items()}
-        num_labels = len(id2label)
-    except Exception as e:
-        raise gr.Error(f"Error loading or parsing labels.json: {e}")
-
-    try:
-        # Load a model architecture from torchvision
-        model = getattr(models, base_model_name)(weights=None)
-        
-        # Replace the final fully-connected layer (classifier)
-        # This assumes a ResNet-like architecture with a '.fc' attribute
-        if hasattr(model, 'fc') and isinstance(model.fc, torch.nn.Linear):
-            num_ftrs = model.fc.in_features
-            model.fc = torch.nn.Linear(num_ftrs, num_labels)
-        else:
-            raise gr.Error(f"Cannot automatically replace classifier for '{base_model_name}'. This function currently supports models with a '.fc' attribute like ResNet.")
-
-    except AttributeError:
-        raise gr.Error(f"Model '{base_model_name}' not found in TorchVision.")
-    except Exception as e:
-        raise gr.Error(f"Error building model architecture: {e}")
-
-    try:
-        # Load the state dictionary
-        state_dict = torch.load(pth_path.name, map_location=torch.device('cpu'))
-        model.load_state_dict(state_dict)
-        model.eval()
-    except Exception as e:
-        raise gr.Error(f"Error loading state dict from '{os.path.basename(pth_path.name)}'. Original error: {e}")
-
-    # Define image transforms for TorchVision models
-    preprocess = T.Compose([
-        T.Resize(256),
-        T.CenterCrop(224),
-        T.ToTensor(),
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-    
-    img_t = preprocess(input_image)
-    batch_t = torch.unsqueeze(img_t, 0)
-
-    with torch.no_grad():
-        outputs = model(batch_t)
-    
-    probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
-    top5_prob, top5_indices = torch.topk(probabilities, 5)
-    
-    return {id2label[i.item()]: p.item() for i, p in zip(top5_indices, top5_prob)}
-
 
 def run_plot_metrics(json_path):
     try:
@@ -628,24 +566,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
             util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
 
-    with gr.Tab("Testing"):
-        gr.Markdown("## Test a .pth Model")
-        gr.Markdown("This tab allows you to test a model from a `.pth` state dictionary file. You need to provide the base model architecture it was fine-tuned from, and a `labels.json` file mapping indices to class names.")
-        with gr.Row():
-            with gr.Column(scale=1):
-                test_base_model = gr.Textbox(label="Base Model Name", placeholder="e.g., resnet50")
-                test_pth_path = gr.File(label="Upload .pth model file", file_types=[".pth"])
-                test_labels_path = gr.File(label="Upload labels.json file", file_types=[".json"])
-                test_input_image = gr.Image(type="pil", label="Upload image for inference")
-            with gr.Column(scale=1):
-                test_output_label = gr.Label(num_top_classes=5, label="Predictions")
-                test_button = gr.Button("Run Test Inference", variant="primary")
-        
-        test_button.click(
-            fn=test_pth_model,
-            inputs=[test_base_model, test_pth_path, test_labels_path, test_input_image],
-            outputs=test_output_label
-        )
 
 if __name__ == "__main__":
     demo.launch()
