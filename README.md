@@ -29,11 +29,14 @@ Several models were trained to find the best-performing architecture for this cl
 
 ### Results
 
-The performance of each model was evaluated on the test set. The Swin Transformer model achieved the highest accuracy.
+The performance of each model was evaluated on the test set. The SwinV2-Large model achieved the highest accuracy.
 
 | Model | Accuracy | F1 (Macro) |
 | :--- | :---: | :---: |
-| Swin Transformer | **88.85%** | **0.8861** |
+| SwinV2 Large | **89.18%** | **0.8875** |
+| Swin Transformer | 88.85% | 0.8861 |
+| ConvNeXt V2 Tiny | 86.72% | 0.8615 |
+| SwinV2 Tiny | 83.77% | 0.8313 |
 | FocalNet Base | 82.62% | 0.8157 |
 | Swin Tiny (EuroSAT) | 80.00% | 0.7928 |
 | Swin Tiny | 78.44% | 0.7758 |
