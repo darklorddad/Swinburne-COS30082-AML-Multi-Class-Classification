@@ -11,6 +11,8 @@ import tempfile
 import matplotlib.pyplot as plt
 import subprocess
 import sys
+import webbrowser
+import time
 
 from utils import (
     util_create_class_mapping, util_process_dataset, util_normalise_class_names,
@@ -174,11 +176,15 @@ def run_count_classes(target_dir, save_to_manifest, manifest_path):
     return run_with_log_capture(util_count_classes, target_dir, save_to_manifest, manifest_path)
 
 def launch_autotrain_ui():
-    """Launches the AutoTrain Gradio UI in a separate process."""
+    """Launches the AutoTrain Gradio UI and opens it in a new browser tab."""
     command = [sys.executable, "launch_autotrain.py"]
+    autotrain_url = "http://localhost:7861"
     try:
         subprocess.Popen(command)
-        message = "Successfully launched AutoTrain UI. It should be available at http://localhost:7861 shortly."
+        # Give the server a moment to start
+        time.sleep(3)
+        webbrowser.open(autotrain_url)
+        message = f"Successfully launched AutoTrain UI. It should now be open in your web browser at {autotrain_url}."
         print(message)
         return message
     except Exception as e:
