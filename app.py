@@ -583,7 +583,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         )
     with gr.Tab("Data Preparation"):
         with gr.Accordion("Organise Raw Dataset", open=False):
-            gr.Markdown("Organises a raw dataset from separate train/test zip files and annotation files into a structured output directory. This is useful for datasets like CUB_200_2011 where training and testing images are provided in separate archives.")
+            gr.Markdown("Organises a raw dataset from separate train/test zip files and annotation files into a structured output directory. This is useful for datasets where training and testing images are provided in separate archives.")
             with gr.Row():
                 prep_org_train_zip = gr.File(label="Train Images Zip File")
                 prep_org_test_zip = gr.File(label="Test Images Zip File")
