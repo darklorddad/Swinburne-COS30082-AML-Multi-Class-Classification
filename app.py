@@ -479,7 +479,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
                 inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
-        inf_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
 
     with gr.Tab("Training Metrics"):
         with gr.Row():
@@ -520,6 +519,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             outputs=inf_plots + [inf_plots_container, inf_model_path]
         )
         metrics_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
+        inf_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
 
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
