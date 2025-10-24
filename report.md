@@ -19,31 +19,31 @@ The project utilises the **Caltech-UCSD Birds 200 (CUB-200) dataset**, which con
 An initial analysis of the dataset revealed a slight class imbalance, with the number of images per class ranging from 20 to 39. The imbalance ratio (max/min) was calculated to be 1.95:1. While not extreme, this imbalance was noted and its potential impact was considered during evaluation by using macro-averaged metrics that treat each class equally.
 
 The pre-processing pipeline was automated and consisted of several key steps:
-1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a single directory with a standard image folder structure (`<class_name>/<image_file>`) for compatibility with the Hugging Face `autotrain` framework.
+1.  **Dataset Organisation**: The initial dataset, provided as ZIP archives and text-based annotation files, was reorganised into a single directory with a standard image folder structure (`<class_name>/<image_file>`) for compatibility with the Hugging Face autotrain framework.
 2.  **Name Normalisation**: Class directory names and image filenames were converted to lowercase. This standardises the naming convention, preventing potential case-related errors and ensuring compatibility with various tools and libraries.
-3.  **Data Splitting**: The organised dataset was split into `train` and `validation` sets. A 20% validation split was used, ensuring that each class had a minimum of 5 images in both splits to allow for robust validation. This step is crucial for monitoring the model's generalisation performance during training.
+3.  **Data Splitting**: The organised dataset was split into `train` and `validation` sets. A 20% validation split was used, ensuring that each class had a minimum of 5 images in both splits to allow for at the minimum, a decent validation. This step is crucial for monitoring the model's generalisation performance during training.
 
 #### 1.2. Model Architectures and Transfer Learning
 
-The core strategy involved **transfer learning**, leveraging the power of large-scale, pre-trained vision models. Instead of training a model from scratch, which would be computationally expensive and prone to overfitting on a relatively small dataset like CUB-200, several state-of-the-art Vision Transformer (ViT) and ConvNeXt models were fine-tuned.
+The core strategy involved **transfer learning**, leveraging the power of large-scale, pre-trained vision models. Instead of training a model from scratch, which would be computationally expensive and prone to overfitting on a relatively small dataset like CUB-200, several state-of-the-art Vision Transformer (ViT) models and a Convolutional Neural Network (CNN) model were fine-tuned.
 
 The following pre-trained models were selected for experimentation to compare their effectiveness:
 
 | Model Name | Base Architecture | Pre-trained On |
 | :--- | :--- | :--- |
-| **Swin-Tiny-78** | `microsoft/swin-tiny-patch4-window7-224` | ImageNet-1K |
-| **Swin-Tiny-Eurosat-80** | `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | EuroSAT (Satellite) |
-| **Focalnet-Base-82** | `microsoft/focalnet-base` | ImageNet-22K |
-| **SwinV2-Tiny-83** | `microsoft/swinv2-tiny-patch4-window16-256` | ImageNet-22K |
-| **ConvNeXt-V2-Tiny-86** | `facebook/convnextv2-tiny-22k-224` | ImageNet-22K |
-| **Swin-Transformer-88** | `XinWenMonash/swin_transformer` | ImageNet-1K |
-| **SwinV2-Large-89** | `microsoft/swinv2-large-patch4-window12-192-22k` | ImageNet-22K |
+| **Swin-Tiny-78** | `microsoft/swin-tiny-patch4-window7-224` | ImageNet-1k |
+| **Swin-Tiny-Eurosat-80** | `nielsr/swin-tiny-patch4-window7-224-finetuned-eurosat` | ImageNet-1k [fine-tuned on EuroSAT (Satellite) dataset] |
+| **Focalnet-Base-82** | `microsoft/focalnet-base` | ImageNet-1k |
+| **SwinV2-Tiny-83** | `microsoft/swinv2-tiny-patch4-window16-256` | ImageNet-1k |
+| **ConvNeXt-V2-Tiny-86** | `facebook/convnextv2-tiny-22k-224` | ImageNet-22k |
+| **Swin-Transformer-88** | `XinWenMonash/swin_transformer` | N/A |
+| **SwinV2-Large-89** | `microsoft/swinv2-large-patch4-window12-192-22k` | ImageNet-21k |
 
 These models, particularly those based on the **Swin Transformer** architecture, employ a hierarchical structure and shifted windows to capture both local and global features efficiently, making them highly effective for computer vision tasks. A classification head was added to each pre-trained model and fine-tuned on the CUB-200 dataset.
 
 #### 1.3. Training Strategy and Hyperparameters
 
-All models were trained using the Hugging Face `autotrain-advanced` tool, which provides a streamlined yet powerful interface for fine-tuning. The training process was configured with a consistent set of robust hyperparameters to ensure a fair comparison.
+All models were trained using the Hugging Face `autotrain-advanced` tool, which provides a streamlined yet powerful interface for fine-tuning. The training process was configured with a consistent set of hyperparameters to ensure a fair comparison.
 
 -   **Loss Function**: **Cross-Entropy Loss**, the standard for multi-class classification, was used.
 -   **Optimizer**: The **AdamW** optimizer (`adamw_torch`) was chosen for its effectiveness in training transformer-based models.
