@@ -75,6 +75,7 @@ def util_process_dataset(annotations_path, source_dir, dest_dir, class_mapping, 
 def util_normalise_class_names(target_dir, log_capture):
     print(f"\nStarting normalisation in '{target_dir}'...", file=log_capture)
     try:
+        # Make a static list of directories to process, as we're modifying the contents of the target_dir
         subdirectories = [d for d in os.listdir(target_dir) if os.path.isdir(os.path.join(target_dir, d))]
         if not subdirectories:
             print("No subdirectories found to normalise.", file=log_capture)
@@ -86,20 +87,16 @@ def util_normalise_class_names(target_dir, log_capture):
                 continue
             old_path = os.path.join(target_dir, old_name)
             new_path = os.path.join(target_dir, new_name)
+            # On case-sensitive systems, check if a different directory with the new name already exists.
             if os.path.exists(new_path) and not os.path.samefile(old_path, new_path):
                 print(f"Warning: Cannot rename '{old_name}' to '{new_name}' because a different directory with that name already exists. Skipping.", file=log_capture)
                 continue
             try:
-                temp_name = old_name + "_temp_rename"
-                temp_path = os.path.join(target_dir, temp_name)
-                if os.path.exists(temp_path):
-                    print(f"Warning: Temporary path '{temp_path}' already exists. Skipping rename for '{old_name}'.", file=log_capture)
-                    continue
-                os.rename(old_path, temp_path)
-                os.rename(temp_path, new_path)
+                # Use shutil.move as it correctly handles case-only renames on Windows
+                shutil.move(old_path, new_path)
                 print(f"Renamed '{old_name}' to '{new_name}'.", file=log_capture)
-            except OSError as e:
-                print(f"Error renaming '{old_name}': {e}", file=log_capture)
+            except Exception as e:
+                print(f"Error renaming '{old_name}' to '{new_name}': {e}", file=log_capture)
         print("\nNormalisation complete.", file=log_capture)
     except Exception as e:
         print(f"An unexpected error occurred: {e}", file=log_capture)
