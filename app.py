@@ -253,12 +253,12 @@ def util_get_class_from_line(line: str):
 def util_analyse_balance(manifest_path, log_capture):
     if not os.path.exists(manifest_path):
         print(f"Error: Manifest file not found at '{manifest_path}'", file=log_capture)
-        return None, None
+        return None
     with open(manifest_path, 'r', encoding='utf-8') as f: lines = f.readlines()
     class_counts = Counter(c for line in lines if (c := util_get_class_from_line(line)))
     if not class_counts:
         print("No classes found in the manifest file.", file=log_capture)
-        return "No classes found.", None
+        return None
     counts = list(class_counts.values())
     imbalance_ratio = max(counts) / min(counts)
     summary = (
