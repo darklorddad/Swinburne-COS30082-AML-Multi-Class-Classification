@@ -468,6 +468,8 @@ def update_model_choices():
 with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (Bird Species)") as demo:
     gr.Markdown("# Multi-Class Classification (Bird Species)")
 
+    refresh_button = gr.Button(elem_id="model_refresh_button", visible=False)
+
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
@@ -570,7 +572,17 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
             util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
 
-    demo.load(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path], every=5)
+    refresh_button.click(
+        fn=update_model_choices,
+        inputs=[],
+        outputs=[inf_model_path, metrics_model_path]
+    )
+    demo.load(
+        fn=update_model_choices,
+        inputs=[],
+        outputs=[inf_model_path, metrics_model_path],
+        _js="() => { setInterval(() => { const btn = document.getElementById('model_refresh_button'); if (btn) { btn.click(); } }, 5000) }"
+    )
 
 if __name__ == "__main__":
     demo.launch()
