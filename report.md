@@ -51,6 +51,7 @@ All models were trained using the Hugging Face `autotrain-advanced` tool, which 
 -   **Batch Size**: A batch size of 32 was used, with gradient accumulation (3 or 4 steps) to simulate a larger effective batch size, aiding in stable gradient estimation.
 -   **Regularisation**: To combat overfitting, **weight decay** (L2 regularisation) was set to `0.01`.
 -   **Mixed Precision**: `fp16` or `bf16` mixed-precision training was enabled to accelerate training and reduce memory consumption without significant loss in performance.
+-   **Fine-Tuning Approach**: The entire pre-trained model was unfrozen and fine-tuned, rather than only training the newly added classification head. This "full fine-tuning" approach allows the model to adapt all its parameters to the specifics of the bird species dataset. A single learning rate was applied across all layers; while differential learning rates could be considered, this standard approach is a strong baseline and proved effective.
 -   **Early Stopping**: A crucial mechanism to prevent overfitting, training was configured to stop if the validation loss did not improve by at least `0.01` for 5 consecutive epochs.
 
 The models were trained for a maximum of 100 epochs, but early stopping often terminated the process sooner, saving computational resources and yielding models with better generalisation.
