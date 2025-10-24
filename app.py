@@ -613,7 +613,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
         with gr.Accordion("Split Dataset for AutoTrain", open=False):
             gr.Markdown("Splits a structured dataset into `training` and `validation` sets, suitable for use with tools like AutoTrain. It ensures that each class has a minimum number of images in both splits and creates a manifest file detailing the results.")
-            prep_split_source = gr.File(label="Source Directory", file_count="directory")
+            prep_split_source = gr.Textbox(label="Source Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to split")
             prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'")
             prep_split_min = gr.Number(label="Min Images Per Split", value=5)
             prep_split_button = gr.Button("Split Dataset")
