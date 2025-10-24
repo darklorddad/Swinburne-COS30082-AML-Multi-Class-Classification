@@ -707,7 +707,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
 
     with gr.Tab("Analysis & Utilities"):
         with gr.Accordion("Check Dataset Balance", open=False):
-            gr.Markdown("Analyses a dataset manifest file to check for class imbalance. It provides a summary of image counts per class and generates a bar chart to visualise the distribution.")
             analysis_balance_path = gr.Textbox(label="Path to Manifest File", placeholder="e.g., 'autotrain_dataset/Dataset-manifest.json'")
             analysis_balance_button = gr.Button("Analyse Balance")
             analysis_balance_summary = gr.Textbox(label="Summary", interactive=False, lines=10)
@@ -732,7 +731,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
                 outputs=[analysis_save_log]
             )
         with gr.Accordion("Count Classes in Directory", open=False):
-            gr.Markdown("Counts the number of subdirectories (classes) and the number of files (items) within each class in a given directory. It can optionally save this information to a markdown manifest file.")
             util_count_dir = gr.Textbox(label="Dataset Directory Name", value="processed_dataset", placeholder="Enter the name of the directory to count")
             util_count_save = gr.Checkbox(label="Save to manifest file")
             util_count_path = gr.Textbox(label="Manifest File Path", value="class_counts.md")
@@ -740,7 +738,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_count_log = gr.Textbox(label="Log", interactive=False, lines=10)
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
-            gr.Markdown("Creates a manifest file listing all files within a specified directory and its subdirectories. It's useful for getting an overview of a project's structure or for creating file lists for other processes.")
             util_manifest_dir = gr.Textbox(label="Target Directory Name", value=".", placeholder="Enter the name of the directory to scan")
             util_manifest_save = gr.Checkbox(label="Save manifest to file", value=False)
             util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md", visible=False)
