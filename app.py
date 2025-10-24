@@ -253,8 +253,21 @@ def util_get_class_from_line(line: str):
 def util_analyse_balance(manifest_path):
     if not os.path.exists(manifest_path):
         raise FileNotFoundError(f"Error: Manifest file not found at '{manifest_path}'")
-    with open(manifest_path, 'r', encoding='utf-8') as f: lines = f.readlines()
-    class_counts = Counter(c for line in lines if (c := util_get_class_from_line(line)))
+    with open(manifest_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    is_class_count_manifest = any('|---|' in line for line in lines[:5]) or (lines and lines[0].strip() == "# Class Count Manifest")
+    class_counts = Counter()
+    if is_class_count_manifest:
+        for line in lines:
+            line = line.strip()
+            if line.startswith('|'):
+                parts = [p.strip() for p in line.split('|')]
+                if len(parts) >= 4:
+                    class_name, count_str = parts[1], parts[2]
+                    if class_name.lower() not in ('class name', '---') and count_str.isdigit():
+                        class_counts[class_name] = int(count_str)
+    else:
+        class_counts = Counter(c for line in lines if (c := util_get_class_from_line(line)))
     if not class_counts:
         return "No classes found in the manifest file.", None
     counts = list(class_counts.values())
