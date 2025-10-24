@@ -456,6 +456,11 @@ def get_model_choices():
         print("Warning: Could not find the current directory to scan for models.")
         return []
 
+def update_model_choices():
+    """Refreshes the list of available models in the dropdowns."""
+    choices = get_model_choices()
+    return gr.update(choices=choices), gr.update(choices=choices)
+
 # #############################################################################
 # GRADIO UI
 # #############################################################################
@@ -466,15 +471,20 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
     with gr.Tab("Inference"):
         with gr.Row():
             with gr.Column(scale=1):
-                inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
+                with gr.Row():
+                    inf_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None, scale=4)
+                    inf_refresh_button = gr.Button("Refresh", scale=1)
                 inf_input_image = gr.Image(type="pil", label="Upload a bird image")
             with gr.Column(scale=1):
                 inf_output_label = gr.Label(num_top_classes=5, label="Predictions")
                 inf_button = gr.Button("Classify", variant="primary")
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
+        inf_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
 
     with gr.Tab("Training Metrics"):
-        metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None)
+        with gr.Row():
+            metrics_model_path = gr.Dropdown(label="Select Model", choices=get_model_choices(), value=None, scale=4)
+            metrics_refresh_button = gr.Button("Refresh", scale=1)
         with gr.Column(visible=False) as inf_plots_container:
             with gr.Row():
                 inf_plot_loss = gr.Plot(label="Loss")
@@ -509,6 +519,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             inputs=[metrics_model_path],
             outputs=inf_plots + [inf_plots_container, inf_model_path]
         )
+        metrics_refresh_button.click(update_model_choices, inputs=[], outputs=[inf_model_path, metrics_model_path])
 
     with gr.Tab("Data Preparation"):
         gr.Markdown("## Tools for Preparing Your Dataset")
