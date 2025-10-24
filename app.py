@@ -216,20 +216,33 @@ def util_split_image_dataset(source_dir, output_dir, min_images_per_split, log_c
         print(f"An error occurred during dataset splitting: {e}", file=log_capture)
 
 # --- From directory_manifest.py ---
-def util_generate_manifest(directory, manifest_path, log_capture):
+def util_generate_manifest(directory, save_manifest, manifest_path, log_capture):
     ignored_dirs = {'.git', '__pycache__', '.vscode', '.idea', 'node_modules', 'venv', '.venv'}
-    ignored_files = {os.path.basename(manifest_path)}
+    ignored_files = {os.path.basename(manifest_path)} if save_manifest else set()
     ignored_extensions = {'.pyc', '.zip', '.log', '.tmp', '.bak', '.swp'}
+    manifest_content = []
     try:
-        with open(manifest_path, "w", encoding="utf-8") as f:
-            for root, dirs, files in os.walk(directory, topdown=True):
-                dirs[:] = [d for d in dirs if d not in ignored_dirs]
-                for filename in files:
-                    if filename in ignored_files or os.path.splitext(filename)[1].lower() in ignored_extensions:
-                        continue
-                    relative_path = os.path.relpath(os.path.join(root, filename), directory).replace(os.sep, '/')
-                    f.write(f"- {relative_path}\n")
-        print(f"Manifest file created at: {manifest_path}", file=log_capture)
+        for root, dirs, files in os.walk(directory, topdown=True):
+            dirs[:] = sorted([d for d in dirs if d not in ignored_dirs])
+            files.sort()
+            for filename in files:
+                if filename in ignored_files or os.path.splitext(filename)[1].lower() in ignored_extensions:
+                    continue
+                relative_path = os.path.relpath(os.path.join(root, filename), directory).replace(os.sep, '/')
+                manifest_content.append(f"- {relative_path}\n")
+        
+        manifest_string = "".join(manifest_content)
+
+        print("--- Manifest Content ---", file=log_capture)
+        print(manifest_string, file=log_capture)
+        print("------------------------", file=log_capture)
+
+        if save_manifest:
+            with open(manifest_path, "w", encoding="utf-8") as f:
+                f.write(manifest_string)
+            print(f"Manifest file created at: {manifest_path}", file=log_capture)
+        else:
+            print("Manifest generated but not saved.", file=log_capture)
     except Exception as e:
         print(f"An error occurred: {e}", file=log_capture)
 
@@ -469,8 +482,15 @@ def run_normalise_image_names(target_dir, to_lowercase, to_standardise):
 def run_split_dataset(source_dir, output_dir, min_images):
     return run_with_log_capture(util_split_image_dataset, source_dir, output_dir, min_images)
 
-def run_generate_manifest(directory, manifest_path):
-    return run_with_log_capture(util_generate_manifest, directory, manifest_path)
+def run_generate_manifest(directory, save_manifest, manifest_path):
+    log_capture = io.StringIO()
+    with redirect_stdout(log_capture):
+        try:
+            directory_path = directory.name if hasattr(directory, 'name') else directory
+            util_generate_manifest(directory_path, save_manifest, manifest_path, log_capture)
+        except Exception as e:
+            print(f"An error occurred: {e}", file=log_capture)
+    return log_capture.getvalue()
 
 def run_check_balance(manifest_path):
     log_capture = io.StringIO()
@@ -656,11 +676,13 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             util_count_button.click(run_count_classes, inputs=[util_count_dir, util_count_save, util_count_path], outputs=util_count_log)
         with gr.Accordion("Generate Directory Manifest", open=False):
             gr.Markdown("Creates a manifest file listing all files within a specified directory and its subdirectories. It's useful for getting an overview of a project's structure or for creating file lists for other processes.")
-            util_manifest_dir = gr.Textbox(label="Target Directory Name", value=".", placeholder="Enter the name of the directory to scan")
-            util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md")
+            util_manifest_dir = gr.File(label="Target Directory", file_count="directory")
+            util_manifest_save = gr.Checkbox(label="Save manifest to file", value=False)
+            util_manifest_path = gr.Textbox(label="Save Manifest As", value="manifest.md", visible=False)
             util_manifest_button = gr.Button("Generate Manifest")
-            util_manifest_log = gr.Textbox(label="Log", interactive=False, lines=5)
-            util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_path], outputs=util_manifest_log)
+            util_manifest_log = gr.Textbox(label="Manifest Content & Log", interactive=False, lines=20)
+            util_manifest_save.change(fn=lambda x: gr.update(visible=x), inputs=util_manifest_save, outputs=util_manifest_path)
+            util_manifest_button.click(run_generate_manifest, inputs=[util_manifest_dir, util_manifest_save, util_manifest_path], outputs=util_manifest_log)
 
     refresh_button.click(
         fn=update_model_choices,
