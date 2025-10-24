@@ -42,7 +42,6 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         inf_button.click(classify_bird, inputs=[inf_model_path, inf_input_image], outputs=inf_output_label)
 
     with gr.Tab("Training"):
-        gr.Markdown("## Launch AutoTrain UI\n\nClick the button below to launch the AutoTrain Advanced UI for training new models. It will open in a new process and be available at `http://localhost:7861`.")
         train_launch_button = gr.Button("Launch AutoTrain UI")
         train_launch_log = gr.Textbox(label="Status", interactive=False)
         train_launch_button.click(
