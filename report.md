@@ -39,7 +39,7 @@ The following pre-trained models were selected for experimentation to compare th
 | **Swin-Transformer-88** | `XinWenMonash/swin_transformer` | N/A |
 | **SwinV2-Large-89** | `microsoft/swinv2-large-patch4-window12-192-22k` | ImageNet-21k |
 
-These models, particularly those based on the **Swin Transformer** architecture, employ a hierarchical structure and shifted windows to capture both local and global features efficiently, making them highly effective for computer vision tasks. A classification head was added to each pre-trained model and fine-tuned on the CUB-200 dataset.
+These models represent different architectural approaches. Models based on the **Swin Transformer** architecture employ a hierarchical structure and shifted windows to capture features efficiently. The **FocalNet** model introduces a focal modulation mechanism as an alternative to self-attention, designed to capture visual dependencies at different ranges. A classification head was added to each pre-trained model and fine-tuned on the CUB-200 dataset.
 
 #### 1.3. Training Strategy and Hyperparameters
 
