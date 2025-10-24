@@ -13,6 +13,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from contextlib import redirect_stdout
 import io
+import zipfile
+import tempfile
 
 
 # #############################################################################
@@ -42,9 +44,7 @@ def util_create_class_mapping(train_txt_path, log_capture):
         return None
     return class_mapping
 
-def util_process_dataset(base_dir, annotations_file, source_subdir, dest_dir, class_mapping, log_capture):
-    annotations_path = os.path.join(base_dir, annotations_file)
-    source_dir = os.path.join(base_dir, source_subdir)
+def util_process_dataset(annotations_path, source_dir, dest_dir, class_mapping, log_capture):
     if not os.path.exists(annotations_path):
         print(f"Warning: Annotations file not found: {annotations_path}", file=log_capture)
         return
@@ -360,21 +360,61 @@ def run_with_log_capture(func, *args):
         func(*args, log_capture=log_capture)
     return log_capture.getvalue()
 
-def run_organise_dataset(base_dir):
+def run_organise_dataset(dataset_path, train_txt_path, test_txt_path, train_img_dir, test_img_dir):
     log_capture = io.StringIO()
     with redirect_stdout(log_capture):
-        processed_dir = os.path.join(base_dir, 'Processed_Dataset')
-        os.makedirs(processed_dir, exist_ok=True)
-        train_txt_path = os.path.join(base_dir, 'train.txt')
-        class_mapping = util_create_class_mapping(train_txt_path, log_capture)
-        if not class_mapping:
-            print("Error: Could not create class mapping. Aborting.", file=log_capture)
+        if not dataset_path:
+            print("Error: Please provide a Base Dataset Directory or Zip File.", file=log_capture)
             return log_capture.getvalue()
-        print("Processing training set...", file=log_capture)
-        util_process_dataset(base_dir, 'train.txt', 'Train', processed_dir, class_mapping, log_capture)
-        print("\nProcessing test set...", file=log_capture)
-        util_process_dataset(base_dir, 'test.txt', 'Test', processed_dir, class_mapping, log_capture)
-        print("\nDataset organisation complete.", file=log_capture)
+
+        base_dir = None
+        temp_dir_to_clean = None
+        dataset_path_str = dataset_path.name if hasattr(dataset_path, 'name') else dataset_path
+
+        try:
+            if os.path.isfile(dataset_path_str) and zipfile.is_zipfile(dataset_path_str):
+                temp_dir = tempfile.mkdtemp(prefix="autotrain_org_")
+                print(f"Extracting zip file to {temp_dir}", file=log_capture)
+                with zipfile.ZipFile(dataset_path_str, 'r') as zip_ref:
+                    zip_ref.extractall(temp_dir)
+
+                extracted_items = os.listdir(temp_dir)
+                if len(extracted_items) == 1 and os.path.isdir(os.path.join(temp_dir, extracted_items[0])):
+                    base_dir = os.path.join(temp_dir, extracted_items[0])
+                    print(f"Using extracted sub-directory as base: {base_dir}", file=log_capture)
+                else:
+                    base_dir = temp_dir
+                temp_dir_to_clean = temp_dir
+            elif os.path.isdir(dataset_path_str):
+                base_dir = dataset_path_str
+            else:
+                print(f"Error: Please provide a valid directory or a .zip file for the base dataset. Got: {dataset_path_str}", file=log_capture)
+                return log_capture.getvalue()
+
+            final_train_txt_path = train_txt_path.name if train_txt_path else os.path.join(base_dir, 'train.txt')
+            final_test_txt_path = test_txt_path.name if test_txt_path else os.path.join(base_dir, 'test.txt')
+            final_train_img_dir = train_img_dir if train_img_dir else os.path.join(base_dir, 'Train')
+            final_test_img_dir = test_img_dir if test_img_dir else os.path.join(base_dir, 'Test')
+
+            output_dir_name = os.path.splitext(os.path.basename(dataset_path_str))[0]
+            processed_dir = os.path.join(os.getcwd(), f"{output_dir_name}_Processed")
+            os.makedirs(processed_dir, exist_ok=True)
+            print(f"Processed dataset will be saved to: {processed_dir}", file=log_capture)
+
+            class_mapping = util_create_class_mapping(final_train_txt_path, log_capture)
+            if not class_mapping:
+                print("Error: Could not create class mapping. Aborting.", file=log_capture)
+                return log_capture.getvalue()
+
+            print("Processing training set...", file=log_capture)
+            util_process_dataset(final_train_txt_path, final_train_img_dir, processed_dir, class_mapping, log_capture)
+            print("\nProcessing test set...", file=log_capture)
+            util_process_dataset(final_test_txt_path, final_test_img_dir, processed_dir, class_mapping, log_capture)
+            print("\nDataset organisation complete.", file=log_capture)
+        finally:
+            if temp_dir_to_clean:
+                print(f"Cleaning up temporary directory: {temp_dir_to_clean}", file=log_capture)
+                shutil.rmtree(temp_dir_to_clean)
     return log_capture.getvalue()
 
 def run_normalise_class_names(target_dir):
@@ -533,11 +573,17 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
         )
     with gr.Tab("Data Preparation"):
         with gr.Accordion("Organise Raw Dataset", open=False):
-            gr.Markdown("Organises a raw dataset (like CUB_200_2011) into a structured format. It reads `train.txt` and `test.txt` to move images from `Train/` and `Test/` subdirectories into class-specific folders inside a `Processed_Dataset` directory.")
-            prep_org_basedir = gr.File(label="Base Dataset Directory", file_count="directory")
+            gr.Markdown("Organises a raw dataset (like CUB_200_2011) into a structured format. This tool can accept a directory or a zip file as the base dataset. It reads `train.txt` and `test.txt` to move images from `Train/` and `Test/` subdirectories into a new `_Processed` directory. You can override the default paths for the annotation files and image directories if they differ from the standard structure.")
+            prep_org_dataset = gr.File(label="Base Dataset Directory or Zip File")
+            with gr.Row():
+                prep_org_train_txt = gr.File(label="Train Annotations File (optional)")
+                prep_org_test_txt = gr.File(label="Test Annotations File (optional)")
+            with gr.Row():
+                prep_org_train_dir = gr.File(label="Train Images Directory (optional)", file_count="directory")
+                prep_org_test_dir = gr.File(label="Test Images Directory (optional)", file_count="directory")
             prep_org_button = gr.Button("Organise Dataset")
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
-            prep_org_button.click(run_organise_dataset, inputs=[prep_org_basedir], outputs=prep_org_log)
+            prep_org_button.click(run_organise_dataset, inputs=[prep_org_dataset, prep_org_train_txt, prep_org_test_txt, prep_org_train_dir, prep_org_test_dir], outputs=prep_org_log)
         with gr.Accordion("Normalise Class Directory Names", open=False):
             gr.Markdown("Renames all class subdirectories within a target directory to be lowercase. This helps ensure consistency, which is important for many training frameworks.")
             prep_norm_class_dir = gr.File(label="Target Directory", file_count="directory")
