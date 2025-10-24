@@ -532,19 +532,19 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             outputs=inf_plots + [inf_plots_container, inf_model_path]
         )
     with gr.Tab("Data Preparation"):
-        with gr.Accordion("1. Organise Raw Dataset", open=False):
+        with gr.Accordion("Organise Raw Dataset", open=False):
             gr.Markdown("Organises a raw dataset (like CUB_200_2011) into a structured format. It reads `train.txt` and `test.txt` to move images from `Train/` and `Test/` subdirectories into class-specific folders inside a `Processed_Dataset` directory.")
             prep_org_basedir = gr.File(label="Base Dataset Directory", file_count="directory")
             prep_org_button = gr.Button("Organise Dataset")
             prep_org_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_org_button.click(run_organise_dataset, inputs=[prep_org_basedir], outputs=prep_org_log)
-        with gr.Accordion("2. Normalise Class Directory Names", open=False):
+        with gr.Accordion("Normalise Class Directory Names", open=False):
             gr.Markdown("Renames all class subdirectories within a target directory to be lowercase. This helps ensure consistency, which is important for many training frameworks.")
             prep_norm_class_dir = gr.File(label="Target Directory", file_count="directory")
             prep_norm_class_button = gr.Button("Normalise Class Names")
             prep_norm_class_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_class_button.click(run_normalise_class_names, inputs=[prep_norm_class_dir], outputs=prep_norm_class_log)
-        with gr.Accordion("3. Normalise Image Filenames", open=False):
+        with gr.Accordion("Normalise Image Filenames", open=False):
             gr.Markdown("Processes image filenames within a directory. It can convert all filenames to lowercase and/or standardise them into a `class_name_xxxx.ext` format. This is useful for cleaning up dataset naming conventions.")
             prep_norm_img_dir = gr.File(label="Target Directory", file_count="directory")
             prep_norm_img_lower = gr.Checkbox(label="Convert filenames to lowercase", value=True)
@@ -552,7 +552,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_norm_img_button = gr.Button("Process Image Names")
             prep_norm_img_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_norm_img_button.click(run_normalise_image_names, inputs=[prep_norm_img_dir, prep_norm_img_lower, prep_norm_img_std], outputs=prep_norm_img_log)
-        with gr.Accordion("4. Split Dataset for AutoTrain", open=False):
+        with gr.Accordion("Split Dataset for AutoTrain", open=False):
             gr.Markdown("Splits a structured dataset into `training` and `validation` sets, suitable for use with tools like AutoTrain. It ensures that each class has a minimum number of images in both splits and creates a manifest file detailing the results.")
             prep_split_source = gr.File(label="Source Directory", file_count="directory")
             prep_split_output = gr.Textbox(label="Output Directory Name", placeholder="e.g., 'autotrain_dataset'")
