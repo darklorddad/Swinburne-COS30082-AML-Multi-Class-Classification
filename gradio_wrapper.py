@@ -184,7 +184,18 @@ def launch_autotrain_ui():
     command = [sys.executable, "launch_autotrain.py"]
     autotrain_url = "http://localhost:7861"
     try:
-        AUTOTRAIN_PROCESS = subprocess.Popen(command)
+        # Redirect stdout/stderr to prevent blocking and hide console window on Windows
+        startupinfo = None
+        if sys.platform == "win32":
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+        AUTOTRAIN_PROCESS = subprocess.Popen(
+            command,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            startupinfo=startupinfo
+        )
         # Give the server a moment to start
         time.sleep(3)
         webbrowser.open(autotrain_url)
