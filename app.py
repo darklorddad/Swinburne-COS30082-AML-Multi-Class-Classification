@@ -1,4 +1,4 @@
-import gradio as gr
+Fimport gradio as gr
 from gradio_wrapper import (
     classify_bird, run_organise_dataset, run_normalise_class_names,
     run_normalise_image_names, run_split_dataset, run_generate_manifest,
@@ -126,7 +126,7 @@ with gr.Blocks(theme=gr.themes.Monochrome(), title="Multi-Class Classification (
             prep_split_log = gr.Textbox(label="Log", interactive=False, lines=10)
             prep_split_button.click(run_split_dataset, inputs=[prep_split_source, prep_split_output, prep_split_min], outputs=prep_split_log)
 
-    with gr.Tab("Analysis & Utilities"):
+    with gr.Tab("Analysis and Utilities"):
         with gr.Accordion("Check Dataset Balance", open=False):
             analysis_balance_path = gr.Textbox(label="Path to Manifest File", placeholder="e.g., 'autotrain_dataset/Dataset-manifest.json'")
             analysis_balance_button = gr.Button("Analyse Balance")
