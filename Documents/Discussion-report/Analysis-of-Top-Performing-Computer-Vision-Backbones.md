@@ -98,3 +98,21 @@ For users seeking the single best all-around model for a wide variety of tasks w
 For users working under strict computational or latency constraints, the **EfficientNet-B0** offers the best overall performance for its highly efficient size.
 
 These findings provide a clear, data-driven guide for selecting the right tool for the job in the diverse field of computer vision.
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Funnel+Display&display=swap');
+
+  .markdown-preview {
+    font-family: 'Funnel Display', sans-serif;
+    text-align: justify;
+  }
+
+  .markdown-preview h1,
+  .markdown-preview h2,
+  .markdown-preview h3,
+  .markdown-preview h4,
+  .markdown-preview h5,
+  .markdown-preview h6 {
+    text-align: left; 
+  }
+</style>
